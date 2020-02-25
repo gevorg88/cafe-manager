@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import javax.validation.constraints.NotNull;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,7 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail(@NotNull String email) {
+        Assert.notNull(email, "Empty Email provided");
+        LOG.info("retrieving user with email  {}", email);
         return userRepo.findByEmail(email);
     }
 
