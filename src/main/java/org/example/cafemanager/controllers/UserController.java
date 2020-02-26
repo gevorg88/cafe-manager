@@ -1,6 +1,6 @@
 package org.example.cafemanager.controllers;
 
-import org.example.cafemanager.accessData.user.UserCreate;
+import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.services.user.contracts.UserService;
@@ -11,13 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping(path = "users")
 public class UserController {
     private final UserService userService;
 
-    private MailConstructor mailConstructor;
+    private final MailConstructor mailConstructor;
 
     @Autowired
     public UserController(final UserService userService, final MailConstructor mailConstructor) {
@@ -31,19 +33,19 @@ public class UserController {
             @RequestParam("username") String username,
             Model model
     ) throws Exception {
-//        model.addAttribute("classActiveNewAccount", true);
-//        model.addAttribute("email", userEmail);
-//        model.addAttribute("username", username);
-//
-//        if (userService.findByUsername(username) != null) {
-//            model.addAttribute("usernameExists", true);
-//            return "myAccount";
-//        }
-//
-//        if (userService.findByEmail(userEmail) != null) {
-//            model.addAttribute("email", true);
-//            return "myAccount";
-//        }
+        model.addAttribute("classActiveNewAccount", true);
+        model.addAttribute("email", userEmail);
+        model.addAttribute("username", username);
+
+        if (userService.findByUsername(username) != null) {
+            model.addAttribute("usernameExists", true);
+            return "myAccount";
+        }
+
+        if (userService.findByEmail(userEmail) != null) {
+            model.addAttribute("email", true);
+            return "myAccount";
+        }
 
         String password = SecurityUtility.randomPassword();
 
@@ -53,11 +55,12 @@ public class UserController {
                 userEmail
         ), Role.WAITER);
 
+//        this.mailConstructor.userInviteEmail(user, password);
         model.addAttribute("mailIsSent", "true");
         return "myAccount";
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public String index(Model model) {
         model.addAttribute("user", userService.findAll());
         return "users.list";

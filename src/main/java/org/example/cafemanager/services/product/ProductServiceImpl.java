@@ -1,6 +1,6 @@
 package org.example.cafemanager.services.product;
 
-import org.example.cafemanager.accessData.product.ProductCreate;
+import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.domain.Product;
 import org.example.cafemanager.repositories.ProductRepository;
 import org.example.cafemanager.services.product.contracts.ProductService;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

@@ -1,6 +1,6 @@
 package org.example.cafemanager.controllers;
 
-import org.example.cafemanager.accessData.product.ProductCreate;
+import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.domain.Product;
 import org.example.cafemanager.services.product.contracts.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    public void setProductService(ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 

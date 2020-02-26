@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Autowired
-    public void setUserRepo(UserRepository userRepo) {
+    public UserDetailsServiceImpl(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 

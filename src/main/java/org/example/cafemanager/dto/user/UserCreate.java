@@ -1,4 +1,4 @@
-package org.example.cafemanager.accessData.user;
+package org.example.cafemanager.dto.user;
 
 public class UserCreate {
     private String username;

@@ -1,5 +1,6 @@
 package org.example.cafemanager.configs;
 
+import org.example.cafemanager.repositories.UserRepository;
 import org.example.cafemanager.sechandlers.LoggingAccessDeniedHandler;
 import org.example.cafemanager.services.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -36,8 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
+    //TODO discuss beans
+    public UserDetailsServiceImpl userDetailsService() {
+        return new UserDetailsServiceImpl((UserRepository) getApplicationContext().getBean("userRepo"));
     }
 
     @Bean
@@ -51,12 +52,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/create").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/js/**").permitAll()
                 .antMatchers("/css/**").permitAll()
-                .antMatchers("/img/**").permitAll()
+                .antMatchers("/js/**").permitAll()
+                .antMatchers("/image/**").permitAll()
+                .antMatchers("/fonts/**").permitAll()
+                .antMatchers("/").permitAll()
+//                .antMatchers("/create").permitAll()
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
                 .failureUrl("/login?error")

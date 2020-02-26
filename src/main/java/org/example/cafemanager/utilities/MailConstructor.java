@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailConstructor {
 
-    private Environment env;
+    private final Environment env;
 
     @Autowired
-    public void setEnv(Environment env) {
+    public MailConstructor(Environment env) {
         this.env = env;
     }
 

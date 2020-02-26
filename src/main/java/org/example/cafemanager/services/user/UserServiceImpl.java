@@ -1,6 +1,6 @@
 package org.example.cafemanager.services.user;
 
-import org.example.cafemanager.accessData.user.UserCreate;
+import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.repositories.UserRepository;

@@ -1,4 +1,4 @@
-package org.example.cafemanager.accessData.product;
+package org.example.cafemanager.dto.product;
 
 public class ProductCreate {
     private String name;
