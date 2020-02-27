@@ -6,7 +6,7 @@
 <!--<div th:replace="common/header :: navbar" />-->
 
 <div class="container">
-    <img class="img-responsive" src="image/wood.png" style="margin-top: -75px;"/>
+    <img class="img-responsive" src="/image/wood.png" style="margin-top: -75px;"/>
     <div class="row" style="margin-top: 60px;">
         <div class="col-xs-9 col-xs-offset-3">
 
@@ -28,7 +28,7 @@
                         <div class="panel panel-default" style="border: none;">
                             <div class="panel-body"
                                  style="background-color: #ededed; margin-top: 20px;">
-                                <form method="post" action="/login">
+                                <form method="post" action="@{/logout}">
                                     <div class="form-group">
                                         <label for="newUsername">* Username: </label> <input
                                             required="required" type="text" class="form-control"
@@ -42,7 +42,7 @@
                                             id="password" name="password"/>
                                         <p style="color: #828282">Enter the password that accompanies your username</p>
                                     </div>
-
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <button type="submit" class="btn btn-primary">Log in</button>
                                 </form>
                             </div>

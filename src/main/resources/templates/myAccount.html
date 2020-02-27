@@ -76,20 +76,15 @@
 								<div class="panel-body"
 									style="background-color: #ededed; margin-top: 20px;">
 									<form>
-										<div class="form-group">
-											<label for="newUsername">* Username: </label> <input
-												required="required" type="text" class="form-control"
-												id="newUsername" name="username" />
-											<p style="color: #828282">Enter your username here.</p>
+										<div class="form-group"U>
+											<label for="newUsername">* Username: </label>
+											<input placeholder="Username" required="required" type="text" class="form-control" id="newUsername" name="username" />
 										</div>
 
 										<div class="form-group">
-											<label for="password">* Password: </label> <input
-												required="required" type="password" class="form-control"
-												id="password" name="password" />
-											<p style="color: #828282">Enter the password that accompanies your username</p>
+											<label for="password">* Password: </label>
+											<input placeholder="Password" required="required" type="password" class="form-control" id="password" name="password" />
 										</div>
-										
 										<button type="submit" class="btn btn-primary">Log in</button>
 									</form>
 								</div>
@@ -110,7 +105,6 @@
 												id="recoverEmail" name="email" />
 											<p style="color: #828282">Enter your registered email address here.</p>
 										</div>
-
 										<button type="submit" class="btn btn-primary">Submit</button>
 									</form>
 								</div>
@@ -121,8 +115,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- end of container -->
-
 
 	<div th:replace="common/header :: body-bottom-scripts" />
 </body>

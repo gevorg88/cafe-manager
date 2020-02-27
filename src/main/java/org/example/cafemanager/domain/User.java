@@ -21,19 +21,19 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "first_name")
-//    @NotBlank(message = "First Name is required")
-//    @Length(max = 32, message = "Your first_name is very long")
+    @NotBlank(message = "First Name is required")
+    @Length(max = 32, message = "Your first_name is very long")
     private String firstName;
 
     @Column(name = "last_name")
-//    @NotBlank(message = "Last Name is required")
-//    @Length(max = 32, message = "Your first_name is very long")
+    @NotBlank(message = "Last Name is required")
+    @Length(max = 32, message = "Your first_name is very long")
     private String lastName;
 
-    @Column(name = "user_name", unique = true)
-//    @NotBlank(message = "Username is required")
-//    @Length(max = 32, message = "Username is very long")
-    private String userName;
+    @Column(name = "username", unique = true)
+    @NotBlank(message = "Username is required")
+    @Length(max = 32, message = "Username is very long")
+    private String username;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email is not valid")
@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String email;
 
     @NotBlank(message = "Password is required")
-//    @Length(max = 32, min = 6)
+    @Length(max = 32, min = 6)
     private String password;
 
     @Column(name = "role")
@@ -98,8 +98,8 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public void setTables(Set<CafeTable> tables) {
@@ -119,7 +119,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -147,11 +147,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userName.equals(user.userName);
+        return username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName);
+        return Objects.hash(username);
     }
 }
