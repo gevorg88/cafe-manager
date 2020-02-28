@@ -44,7 +44,8 @@ public class User implements UserDetails {
     @Length(max = 32, min = 6)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")

@@ -1,5 +1,6 @@
 package org.example.cafemanager.configs;
 
+import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.repositories.UserRepository;
 import org.example.cafemanager.sechandlers.LoggingAccessDeniedHandler;
 import org.example.cafemanager.services.user.UserDetailsServiceImpl;
@@ -55,21 +56,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/fonts/**").permitAll()
                 .antMatchers("/").permitAll()
-//                .antMatchers("/create").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers(
+                        "/users"
+                )
+                .hasAnyAuthority("MANAGER")
                 .and()
                 .formLogin()
-                .failureUrl("/login?error")
+                .failureUrl("/login?error=error")
                 .loginPage("/login")
                 .usernameParameter("username")
                 .defaultSuccessUrl("/users")
                 .permitAll()
                 .and()
                 .logout()
+
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/login")
                 .permitAll()
                 .and()
                 .exceptionHandling()

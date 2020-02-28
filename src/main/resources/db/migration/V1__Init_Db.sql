@@ -48,7 +48,7 @@ create table users
     first_name varchar(255),
     last_name  varchar(255),
     password   varchar(255),
-    role       integer,
+    role varchar(255) not null,
     username   varchar(255),
     primary key (id)
 ) engine = InnoDB;
@@ -66,32 +66,21 @@ alter table users
     add constraint UK_r43af9ap4edm43mmtq01oddj6 unique (username);
 
 alter table orders
-    add constraint FKrkhrp1dape261t3x3spj7l5ny
+    add constraint orders_to_tables_fk
         foreign key (table_id)
             references tables (id);
 
 alter table products_in_order
-    add constraint FK52yge8hl6teqf4n4bkul5k5dm
+    add constraint products_in_order_to_orders_fk
         foreign key (order_id)
             references orders (id);
 
 alter table products_in_order
-    add constraint FK60tyehiqoydncbdl4sy6b3tic
+    add constraint products_in_order_to_products_fk
         foreign key (product_id)
             references products (id);
 
 alter table tables
-    add constraint FKa46mvfaviexapys9mope0pwyj
+    add constraint tables_to_users_fk
         foreign key (user_id)
             references users (id);
-INSERT INTO users (email,
-                   first_name,
-                   last_name,
-                   password,
-                   role,
-                   username)
-VALUES ('admin@gmail.com',
-        'admin',
-        'admin',
-        '$2a$12$avo4eJ8mSfn1X.rlzQyzquDMBF7kRVaum5n7ANpCupsY2UyhCvc7q',
-        1, 'admin')

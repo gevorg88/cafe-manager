@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(path = "users")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -27,7 +27,7 @@ public class UserController {
         this.mailConstructor = mailConstructor;
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping("/create")
     public String store(
             @RequestParam("email") String userEmail,
             @RequestParam("username") String username,
@@ -63,6 +63,6 @@ public class UserController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("user", userService.findAll());
-        return "users.list";
+        return "myaccount";
     }
 }
