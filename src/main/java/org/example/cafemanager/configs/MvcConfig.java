@@ -8,22 +8,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.
-                addViewController("/")
-                .setViewName("login");
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
                 "/webjars/**",
-                "/img/**",
+                "/image/**",
+                "/fonts/**",
                 "/css/**",
                 "/js/**")
                 .addResourceLocations(
                         "classpath:/META-INF/resources/webjars/",
-                        "classpath:/static/img/",
+                        "classpath:/static/image/",
+                        "classpath:/static/fonts/",
                         "classpath:/static/css/",
                         "classpath:/static/js/"
                 );

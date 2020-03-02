@@ -4,6 +4,7 @@ import org.example.cafemanager.domain.enums.Role;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Component
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -116,6 +118,14 @@ public class User implements UserDetails {
         Set<GrantedAuthority> authorites = new HashSet<>();
         authorites.add(getRole());
         return authorites;
+    }
+
+    public boolean isManager() {
+        return Role.MANAGER.equals(this.getRole());
+    }
+
+    public boolean isWaiter() {
+        return Role.WAITER.equals(this.getRole());
     }
 
     @Override

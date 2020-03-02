@@ -1,18 +1,26 @@
 package org.example.cafemanager.controllers;
 
+import org.example.cafemanager.dto.user.CreateAjaxResponse;
 import org.example.cafemanager.dto.user.UserCreate;
-import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
+import org.example.cafemanager.dto.user.UserCreateRequestBody;
+import org.example.cafemanager.dto.user.UserPublicProps;
+import org.example.cafemanager.services.user.Exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.MailConstructor;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -27,42 +35,45 @@ public class UserController {
         this.mailConstructor = mailConstructor;
     }
 
-    @PostMapping("/create")
-    public String store(
-            @RequestParam("email") String userEmail,
-            @RequestParam("username") String username,
-            Model model
-    ) throws Exception {
-        model.addAttribute("classActiveNewAccount", true);
-        model.addAttribute("email", userEmail);
-        model.addAttribute("username", username);
-
-        if (userService.findByUsername(username) != null) {
-            model.addAttribute("usernameExists", true);
-            return "myAccount";
-        }
-
-        if (userService.findByEmail(userEmail) != null) {
-            model.addAttribute("email", true);
-            return "myAccount";
-        }
-
+    @PostMapping
+    public ResponseEntity<?> store(
+            @Valid @RequestBody UserCreateRequestBody requestBody,
+            Errors errors
+    ) {
         String password = SecurityUtility.randomPassword();
+        CreateAjaxResponse result = new CreateAjaxResponse();
+        if (errors.hasErrors()) {
+            result.setMessage(errors.getAllErrors()
+                    .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining("\n")));
+            return ResponseEntity.unprocessableEntity().body(result);
+        }
 
-        User user = userService.createUser(new UserCreate(
-                username,
+        UserCreate createDto = new UserCreate(requestBody.getUsername(),
                 password,
-                userEmail
-        ), Role.WAITER);
+                requestBody.getEmail());
+        try {
+            createDto.setFirstName(requestBody.getFirstName());
+            createDto.setLastName(requestBody.getLastName());
+            userService.createUser(createDto, Role.WAITER);
+            result.setMessage("User has been successfully created");
+        } catch (MustBeUniqueException e) {
+            result.setMessage(e.getMessage());
+            ResponseEntity.unprocessableEntity().body(result);
+        } catch (Exception e) {
+            result.setMessage("Something goes wrong! Try again later");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
 
+        return ResponseEntity.ok(result);
 //        this.mailConstructor.userInviteEmail(user, password);
-        model.addAttribute("mailIsSent", "true");
-        return "myAccount";
     }
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("user", userService.findAll());
-        return "myaccount";
+        Collection<UserPublicProps> users = userService.getAllWaiters();
+        model.addAttribute("users", users);
+//        model.addAttribute("users", userService.findAll());
+        return "user/list";
     }
 }

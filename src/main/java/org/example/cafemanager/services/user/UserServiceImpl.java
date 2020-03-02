@@ -1,9 +1,11 @@
 package org.example.cafemanager.services.user;
 
+import org.example.cafemanager.dto.user.UserPublicProps;
 import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.repositories.UserRepository;
+import org.example.cafemanager.services.user.Exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,6 +49,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserCreate userCreate, Role role) {
+        if (findByUsername(userCreate.getUsername()) != null) {
+            throw new MustBeUniqueException("username");
+        }
+
+        if (findByEmail(userCreate.getEmail()) != null) {
+            throw new MustBeUniqueException("email");
+        }
+
         User user = new User();
         user.setUserName(userCreate.getUsername());
         user.setEmail(userCreate.getEmail());
@@ -57,5 +69,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         return userRepo.save(user);
+    }
+
+    @Override
+    public Collection<UserPublicProps> getAllWaiters() {
+        return this.userRepo.findAllByRole(Role.WAITER);
     }
 }

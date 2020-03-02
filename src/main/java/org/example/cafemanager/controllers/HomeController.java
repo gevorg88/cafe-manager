@@ -1,8 +1,8 @@
 package org.example.cafemanager.controllers;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class HomeController {
@@ -12,12 +12,15 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Authentication authentication) {
+        if (null != authentication && authentication.isAuthenticated()) {
+            return "redirect:welcome";
+        }
         return "login";
     }
 
-    @PostMapping("/logout")
-    public String logout() {
-        return "redirect:login";
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome";
     }
 }

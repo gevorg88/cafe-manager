@@ -51,26 +51,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**").permitAll()
-                .antMatchers("/js/**").permitAll()
-                .antMatchers("/image/**").permitAll()
-                .antMatchers("/fonts/**").permitAll()
-                .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
                 .antMatchers(
-                        "/users"
+                        "/css/**",
+                        "/js/**",
+                        "/image/**",
+                        "/fonts/**",
+                        "/",
+                        "/login"
+                ).permitAll()
+                .antMatchers("/welcome")
+                .authenticated()
+                .antMatchers(
+                        "/users",
+                        "/users/**",
+                        "/products",
+                        "/products/**"
                 )
-                .hasAnyAuthority("MANAGER")
+                .hasAuthority(Role.MANAGER.getAuthority())
                 .and()
                 .formLogin()
                 .failureUrl("/login?error=error")
                 .loginPage("/login")
                 .usernameParameter("username")
-                .defaultSuccessUrl("/users")
+                .defaultSuccessUrl("/welcome")
                 .permitAll()
                 .and()
                 .logout()
-
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

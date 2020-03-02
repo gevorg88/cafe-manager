@@ -6,50 +6,49 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <title>Cafe Manager</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
-
+    <link href="/css/toastr.min.css" rel="stylesheet"/>
     <link href="/css/non-responsive.css" rel="stylesheet"/>
-
-    <!-- Custom styles for this template -->
     <link href="/css/style.css" rel="stylesheet"/>
-
-    <link rel="icon" href="/image/applie-touch-icon.png"/>
+    <link rel="icon" th:href=@{image/apple-touch-icon.png}/>
 </head>
-
 <body>
 <div th:fragment="navbar">
-    <div class="page-top"
-         style="width: 100%; height: 20px; background-color: #f46b42;"></div>
+    <div class="page-top" style="width: 100%; height: 20px; background-color: #f46b42;"></div>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-inverse">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Cafe Manager</a>
+            <div class="navbar-header pull-left">
+                <a class="navbar-brand" th:href="@{/welcome}">Cafe Manager</a>
             </div>
-            <div id="navbar">
-                <ul class="nav navbar-nav navbar-left">
-                    <li class="dropdown"><a href="#" class="dropdown-toggle"
-                                            data-toggle="dropdown" role="button" aria-haspopup="true"
-                                            aria-expanded="false">BOOKS <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Browse the bookshelf</a></li>
-                            <li><a href="#">Store hours &#38; Directions</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </li>
-                </ul>
+
+            <div id="navbar" class="navbar-header" sec:authorize="hasAuthority('MANAGER')" th:fragment="navigation">
+                <a class="navbar-brand" th:href="@{/users}">Users</a>
+                <a class="navbar-brand" href="#">Products</a>
+                <a class="navbar-brand" href="#">Tables</a>
+                <a class="navbar-brand" href="#">Assign</a>
             </div>
-            <!--/.nav-collapse -->
+
+            <div id="navbar" class="navbar-header" sec:authorize="hasAuthority('WAITER')" th:fragment="navigation">
+                <a class="navbar-brand" href="#">Assigned Tables</a>
+                <a class="navbar-brand" href="#">Products in order</a>
+            </div>
+
+            <div class="navbar-header pull-right" th:if="${#authorization.expression('isAuthenticated()')}">
+                <a href="/logout" th:href="@{#}" onclick="$('#form').submit();" class="navbar-brand">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                </a>
+                <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+            </div>
         </div>
-        <!--/.container-fluid -->
     </nav>
 </div>
-
+<div sec:authorize="hasAuthority('MANAGER')" th:fragment="user-create-modal" th:insert="~{modals/create-modal :: create-modal}"/>
 <div th:fragment="body-bottom-scripts">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/toastr.min.js"></script>
+    <script src="/js/custom.js"></script>
 </div>
 </body>
 </html>
