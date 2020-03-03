@@ -23,12 +23,10 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First Name is required")
     @Length(max = 32, message = "Your first_name is very long")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Last Name is required")
     @Length(max = 32, message = "Your first_name is very long")
     private String lastName;
 
@@ -43,7 +41,7 @@ public class User implements UserDetails {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Length(max = 32, min = 6)
+    @Length(min = 6)
     private String password;
 
     @Column(name = "role", nullable = false)

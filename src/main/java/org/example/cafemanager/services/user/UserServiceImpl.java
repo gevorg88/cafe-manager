@@ -16,7 +16,6 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,12 +33,12 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(@NotNull String email) {
         Assert.notNull(email, "Empty Email provided");
         LOG.info("retrieving user with email  {}", email);
-        return userRepo.findByEmail(email);
+        return userRepo.findUsersByEmail(email);
     }
 
     @Override
     public User findByUsername(String username) {
-        return userRepo.findByEmail(username);
+        return userRepo.findUsersByUsername(username);
     }
 
     @Override
@@ -61,6 +60,8 @@ public class UserServiceImpl implements UserService {
         user.setUserName(userCreate.getUsername());
         user.setEmail(userCreate.getEmail());
         user.setPassword(SecurityUtility.passwordEncoder().encode(userCreate.getPassword()));
+        user.setFirstName(userCreate.getFirstName());
+        user.setLastName(userCreate.getLastName());
         user.setRole(role);
         save(user);
         return user;

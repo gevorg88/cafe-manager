@@ -5,18 +5,14 @@ $(function () {
     });
 
     function retrieveFromForm(formDataArray) {
-        let asd = {};
+        var data = {};
 
-        for (var i = 0; i < formDataArray.length; i++) {
-            var form = formDataArray[i];
-            if (!form.hasOwnProperty("name") || !form.hasOwnProperty("value")) {
-                continue;
+        formDataArray.forEach(function (form) {
+            if (form.hasOwnProperty('name') && form.hasOwnProperty('value')) {
+                data[form['name']] = form['value'];
             }
-            asd[form['name']] = asd[form['value']];
-            console.log(form['name'], form['value']);
-        }
-        console.log(asd);
-        return asd;
+        });
+        return data;
     }
 
     $(document).on('click', '.add-instance', function () {
@@ -38,7 +34,6 @@ $(function () {
             return false;
         }
         var data = retrieveFromForm(formData);
-        console.log(data, JSON.stringify(data), form.serialize(), JSON.stringify(form.serialize()));
         $.ajax({
             url: href,
             type: 'post',
@@ -46,10 +41,17 @@ $(function () {
             mimeType: 'application/json',
             data: JSON.stringify(data),
             success: function (data) {
-                console.log(data, arguments, "success");
+                (new Promise(function (resolve) {
+                    toastr.success(data['message']);
+                    setTimeout(function () {
+                        resolve();
+                    }, 3000);
+                })).then(function () {
+                    return location.reload();
+                });
             },
             error: function (xhr) {
-                console.log(xhr['responseJSON']['message']);
+                toastr.error(xhr['responseJSON']['message']);
             }
         });
     });

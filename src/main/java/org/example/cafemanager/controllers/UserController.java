@@ -1,5 +1,6 @@
 package org.example.cafemanager.controllers;
 
+import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.user.CreateAjaxResponse;
 import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.enums.Role;
@@ -42,6 +43,7 @@ public class UserController {
     ) {
         String password = SecurityUtility.randomPassword();
         CreateAjaxResponse result = new CreateAjaxResponse();
+        User user = null;
         if (errors.hasErrors()) {
             result.setMessage(errors.getAllErrors()
                     .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -55,18 +57,18 @@ public class UserController {
         try {
             createDto.setFirstName(requestBody.getFirstName());
             createDto.setLastName(requestBody.getLastName());
-            userService.createUser(createDto, Role.WAITER);
+            user = userService.createUser(createDto, Role.WAITER);
             result.setMessage("User has been successfully created");
         } catch (MustBeUniqueException e) {
             result.setMessage(e.getMessage());
-            ResponseEntity.unprocessableEntity().body(result);
+            return ResponseEntity.unprocessableEntity().body(result);
         } catch (Exception e) {
             result.setMessage("Something goes wrong! Try again later");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
 
-        return ResponseEntity.ok(result);
 //        this.mailConstructor.userInviteEmail(user, password);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping
