@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(@NotNull String username) {
+        Assert.notNull(username, "Empty Username provided");
         return userRepo.findUsersByUsername(username);
     }
 

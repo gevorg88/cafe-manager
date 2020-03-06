@@ -6,7 +6,6 @@ import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface UserService {
 

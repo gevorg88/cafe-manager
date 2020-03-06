@@ -36,6 +36,13 @@ public class UserController {
         this.mailConstructor = mailConstructor;
     }
 
+    @GetMapping
+    public String index(Model model) {
+        Collection<UserPublicProps> users = userService.getAllWaiters();
+        model.addAttribute("users", users);
+        return "user/list";
+    }
+
     @PostMapping
     public ResponseEntity<?> store(
             @Valid @RequestBody UserCreateRequestBody requestBody,
@@ -69,13 +76,5 @@ public class UserController {
 
 //        this.mailConstructor.userInviteEmail(user, password);
         return ResponseEntity.ok(result);
-    }
-
-    @GetMapping
-    public String index(Model model) {
-        Collection<UserPublicProps> users = userService.getAllWaiters();
-        model.addAttribute("users", users);
-//        model.addAttribute("users", userService.findAll());
-        return "user/list";
     }
 }
