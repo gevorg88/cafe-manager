@@ -4,8 +4,10 @@ import org.example.cafemanager.dto.user.UserPublicProps;
 import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
+import org.example.cafemanager.dto.user.UserUpdateRequestBody;
 import org.example.cafemanager.repositories.UserRepository;
-import org.example.cafemanager.services.user.Exceptions.MustBeUniqueException;
+import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
+import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User();
-        user.setUserName(userCreate.getUsername());
+        user.setUsername(userCreate.getUsername());
         user.setEmail(userCreate.getEmail());
         user.setPassword(SecurityUtility.passwordEncoder().encode(userCreate.getPassword()));
         user.setFirstName(userCreate.getFirstName());
@@ -76,5 +78,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<UserPublicProps> getAllWaiters() {
         return this.userRepo.findAllByRole(Role.WAITER);
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepo.findUserById(id);
+    }
+
+    @Override
+    public User update(Long id, UserUpdateRequestBody requestBody) {
+        User user = userRepo.findUserById(id);
+        if (null == user) {
+            throw new InstanceNotFoundException("user");
+        }
+
+        if (!user.getFirstName().equals(requestBody.getFirstName())){
+            user.setFirstName(requestBody.getFirstName());
+        }
+
+        if (!user.getLastName().equals(requestBody.getLastName())){
+            user.setLastName(requestBody.getLastName());
+        }
+        userRepo.save(user);
+
+        return user;
     }
 }

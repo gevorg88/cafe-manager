@@ -4,16 +4,37 @@ $(function () {
             {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
     });
 
-    function retrieveFromForm(formDataArray) {
-        var data = {};
+    var swalDeleteConf = {
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        },
+        retrieveFromForm = function (formDataArray) {
+            var data = {};
 
-        formDataArray.forEach(function (form) {
-            if (form.hasOwnProperty('name') && form.hasOwnProperty('value')) {
-                data[form['name']] = form['value'];
-            }
-        });
-        return data;
-    }
+            formDataArray.forEach(function (form) {
+                if (form.hasOwnProperty('name') && form.hasOwnProperty('value')) {
+                    data[form['name']] = form['value'];
+                }
+            });
+            return data;
+        },
+        processPromiseResponse = function (message, timeout, _callback) {
+            var _timeout = timeout || 2000;
+            return new Promise(function (resolve) {
+                if (_callback) {
+                    _callback();
+                }
+                toastr.success(message);
+                setTimeout(function () {
+                    resolve();
+                }, _timeout);
+            })
+        };
 
     $(document).on('click', '.add-instance', function () {
         var _this = $(this),
@@ -27,26 +48,24 @@ $(function () {
 
     $(document).on('click', '.save-modal-data', function () {
         var _this = $(this),
-            form = _this.closest('.modal').find('form'),
+            modal = _this.closest('.modal'),
+            form = modal.find('form'),
             formData = form.serializeArray(),
             href = _this.attr('data-href');
         if (!href) {
-            return false;
+            return toastr.error("Wrong url!");
         }
         var data = retrieveFromForm(formData);
         $.ajax({
             url: href,
-            type: 'post',
+            method: 'POST',
             contentType: 'application/json',
             mimeType: 'application/json',
             data: JSON.stringify(data),
             success: function (data) {
-                (new Promise(function (resolve) {
-                    toastr.success(data['message']);
-                    setTimeout(function () {
-                        resolve();
-                    }, 3000);
-                })).then(function () {
+                processPromiseResponse(data['message'], 2000, function () {
+                    modal.modal('hide');
+                }).then(function () {
                     return location.reload();
                 });
             },
@@ -54,5 +73,95 @@ $(function () {
                 toastr.error(xhr['responseJSON']['message']);
             }
         });
+    });
+
+    $(document).on('change', '#user-assign', function () {
+        var _this = $(this),
+            tableId = _this.attr('data-table-id'),
+            userId = _this.val();
+
+        if (!userId) {
+            return toastr.error('Please Select user');
+        }
+
+        if (!tableId) {
+            return toastr.error('Something goes wrong!');
+        }
+        _this.attr('disable', true);
+        $.ajax({
+            url: '/tables/assign/' + tableId + '/' + userId,
+            method: 'POST',
+            success: function (data) {
+                processPromiseResponse(data['message'], 2000).then(function () {
+                    return location.reload();
+                });
+            },
+            error: function (xhr) {
+                return toastr.error(xhr['responseJSON']['message']);
+            }
+        }).done(function () {
+            _this.removeAttr('disable');
+        });
+    });
+
+    $(document).on('click', '.instance-delete', function () {
+        var _this = $(this),
+            url = _this.attr('data-href');
+        if (!url) {
+            return toastr.error('Wrong url');
+        }
+        Swal.fire(swalDeleteConf).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: url,
+                    method: 'DELETE',
+                    success: function (data) {
+                        processPromiseResponse(data['message'], 2000).then(function () {
+                            return location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        return toastr.error(xhr['responseJSON']['message']);
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.edit-instance', function () {
+        var _this = $(this),
+            url = _this.attr('data-href'),
+            data = {},
+            elements = _this.closest('tr').find('input');
+
+        elements.each(function (index, input) {
+            var _input = $(input);
+            data[_input.attr('name')] = _input.val();
+        });
+
+        console.log(url);
+        if (!url) {
+            return toastr.error("Wrong url!");
+        }
+        Swal.fire(swalDeleteConf).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: url,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    mimeType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        processPromiseResponse(data['message'], 2000).then(function () {
+                            return location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        return toastr.error(xhr['responseJSON']['message']);
+                    }
+                });
+            }
+        });
+
     });
 });

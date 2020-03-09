@@ -3,9 +3,7 @@
 <head th:replace="common/header :: common-header"/>
 
 <body>
-<div th:replace="common/header :: navbar">
-
-</div>
+<div th:replace="common/header :: navbar"></div>
 <div class="container">
     <div class="row" style="margin-bottom: -100px;">
         <div class="col-xs-4">
@@ -16,37 +14,31 @@
 
     <div class="col-md-12">
         <div class="col-md-5 pull-left">
-            <h2>Users</h2>
+            <h2>Products</h2>
         </div>
         <div class="col-md-4 pull-right">
-            <button class="btn btn-primary add-instance" id="add-user" data-href="/users" data-modal-id="user-create-modal">Add User</button>
+            <button class="btn btn-primary add-instance" id="add-product" data-href="/products"
+                    data-modal-id="product-create-modal">Add Product
+            </button>
         </div>
         <div class="table-responsive col-md-10">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
+                    <th>Product Name</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user: ${users}" class="instance-wrapper">
+                    <tr th:each="product: ${products}" class="instance-wrapper">
                     <td>
-                        <input type="text" name="firstName" th:value="${user.firstName}" class="form-control" placeholder="First Name">
+                        <input type="text" name="name" th:value="${product.name}" class="form-control" placeholder="Name">
                     </td>
-                    <td>
-                        <input type="text" name="lastName" th:value="${user.lastName}" class="form-control" placeholder="Last Name">
-                    </td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td>
-                        <a class="btn btn-danger btn-xs" th:data-href="'/users/' + ${user.id}">
+                    <td class="text-center">
+                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/products/' + ${product.id}">
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
-                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/users/' + ${user.id}}">
+                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/products/' + ${product.id}}">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                     </td>
@@ -55,10 +47,9 @@
             </table>
         </div>
     </div>
-
 </div>
 
-<div th:replace="common/header :: user-create-modal"/>
+<div th:replace="common/header :: table-create-modal"/>
 <div th:replace="common/header :: body-bottom-scripts"/>
 </body>
 </html>

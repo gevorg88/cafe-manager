@@ -63,11 +63,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .antMatchers(
                         "/users",
+                        "/tables",
+                        "/tables/**",
                         "/users/**",
                         "/products",
                         "/products/**"
                 )
                 .hasAuthority(Role.MANAGER.getAuthority())
+                .antMatchers(
+                        "/orders",
+                        "/orders/**",
+                        "/waiters/**"
+                ).hasAuthority(Role.WAITER.getAuthority())
                 .and()
                 .formLogin()
                 .failureUrl("/login?error=error")

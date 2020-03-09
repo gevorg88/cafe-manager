@@ -99,16 +99,24 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public void setUserName(String username) {
-        this.username = username;
-    }
-
     public void setTables(Set<CafeTable> tables) {
         this.tables = tables;
     }
 
     public void addTable(CafeTable table) {
         this.tables.add(table);
+    }
+
+    public boolean removeTable(CafeTable table) {
+        return this.tables.remove(table);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Set<CafeTable> getTables() {
+        return tables;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.example.cafemanager.domain;
 
 import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
@@ -14,7 +15,11 @@ public class CafeTable {
 
     @NotBlank(message = "Table Name required")
     @Length(max = 32, message = "Table name is very long")
+    @Column(name = "name")
     private String name;
+
+    @OneToOne(mappedBy = "cafeTable")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -42,6 +47,14 @@ public class CafeTable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Order getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     @Override

@@ -10,8 +10,6 @@ public interface SimpleTableProps {
     interface FetchedUser {
         Long getId();
 
-        String getFirstName();
-
-        String getLastName();
+        String getUsername();
     }
 }

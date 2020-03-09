@@ -16,9 +16,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @UniqueElements(message = "Product name should be unique")
     @Length(min = 3, max = 255, message = "Product name should be at least 3 symbols")
-    @NotBlank(message = "Table Name required")
+    @NotBlank(message = "Product Name required")
     @Column(name = "name", unique = true)
     private String name;
 

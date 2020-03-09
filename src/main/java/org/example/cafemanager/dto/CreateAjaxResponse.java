@@ -1,4 +1,4 @@
-package org.example.cafemanager.dto.user;
+package org.example.cafemanager.dto;
 
 import org.springframework.stereotype.Component;
 

@@ -4,6 +4,7 @@ import org.example.cafemanager.dto.user.UserPublicProps;
 import org.example.cafemanager.dto.user.UserCreate;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
+import org.example.cafemanager.dto.user.UserUpdateRequestBody;
 
 import java.util.Collection;
 
@@ -20,4 +21,8 @@ public interface UserService {
     Collection<UserPublicProps> getAllWaiters();
 
     User save(User user);
+
+    User getUserById(Long id);
+
+    User update(Long id, UserUpdateRequestBody requestBody);
 }
