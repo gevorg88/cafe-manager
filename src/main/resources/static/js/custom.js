@@ -89,7 +89,7 @@ $(function () {
         }
         _this.attr('disable', true);
         $.ajax({
-            url: '/tables/assign/' + tableId + '/' + userId,
+            url: '/tables/manager/assign/' + tableId + '/' + userId,
             method: 'POST',
             success: function (data) {
                 processPromiseResponse(data['message'], 2000).then(function () {
@@ -139,7 +139,6 @@ $(function () {
             data[_input.attr('name')] = _input.val();
         });
 
-        console.log(url);
         if (!url) {
             return toastr.error("Wrong url!");
         }

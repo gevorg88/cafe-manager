@@ -30,7 +30,7 @@
 
             <div id="navbar" class="navbar-header" sec:authorize="hasAuthority('WAITER')" th:fragment="navigation">
                 <a class="navbar-brand" th:href="@{/tables}">Assigned Tables</a>
-                <a class="navbar-brand" href="#">Orders</a>
+                <a class="navbar-brand" th:href="@{/orders}">Orders</a>
             </div>
 
             <div class="navbar-header pull-right" th:if="${#authorization.expression('isAuthenticated()')}">

@@ -19,7 +19,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/tables")
@@ -34,13 +33,17 @@ public class TableController {
     }
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("tables", tableService.getAllTables());
-        model.addAttribute("users", userService.getAllWaiters());
-        return "table/list";
+    public String index(@AuthenticationPrincipal User user, Model model) {
+        if (user.isManager()) {
+            model.addAttribute("tables", tableService.getAllTables());
+            model.addAttribute("users", userService.getAllWaiters());
+            return "table/list";
+        }
+        model.addAttribute("tables", tableService.getUserAssignedTables(user.getId()));
+        return "table/waiter-list";
     }
 
-    @PostMapping
+    @PostMapping("/manager")
     public ResponseEntity<?> store(
             @Valid @RequestBody TableCreateRequestBody requestBody,
             Errors errors
@@ -64,7 +67,7 @@ public class TableController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/assign/{tableId}/{userId}")
+    @PostMapping("/manager/assign/{tableId}/{userId}")
     public ResponseEntity<?> assignUser(
             @PathVariable Long tableId,
             @PathVariable Long userId) {
@@ -82,7 +85,7 @@ public class TableController {
         }
     }
 
-    @DeleteMapping("/{tableId}")
+    @DeleteMapping("/manager/{tableId}")
     public ResponseEntity<?> destroy(@PathVariable Long tableId) {
         CreateAjaxResponse result = new CreateAjaxResponse();
 
@@ -99,7 +102,7 @@ public class TableController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/manager/{id}")
     public ResponseEntity<?> update(
             @Valid @RequestBody TableCreateRequestBody requestBody,
             @PathVariable Long id,
@@ -124,12 +127,6 @@ public class TableController {
             result.setMessage("Something goes wrong! Try again later");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
-    }
-
-    @GetMapping(value = "/waiters")
-    public String assignedTables(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("tables", user.getTables());
-        return "table/waiter-list";
     }
 }
 

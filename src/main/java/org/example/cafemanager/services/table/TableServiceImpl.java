@@ -104,4 +104,9 @@ public class TableServiceImpl implements TableService {
 
         return table;
     }
+
+    @Override
+    public Collection<OnlyTableProps> getUserAssignedTables(Long id) {
+        return tableRepo.getAllByUserIdIs(id);
+    }
 }

@@ -17,7 +17,7 @@
             <h2>Tables</h2>
         </div>
         <div class="col-md-4 pull-right">
-            <button class="btn btn-primary add-instance" id="add-table" data-href="/tables"
+            <button class="btn btn-primary add-instance" id="add-table" data-href="@{/tables/manager}"
                     data-modal-id="table-create-modal">Add Table
             </button>
         </div>
@@ -46,10 +46,10 @@
                         </select>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/tables/' + ${table.id}">
+                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="@{'/tables/manager/' + ${table.id}}">
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
-                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/tables/' + ${table.id}}">
+                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/tables/manager/' + ${table.id}}">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                     </td>

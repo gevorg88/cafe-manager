@@ -14,42 +14,30 @@
 
     <div class="col-md-12">
         <div class="col-md-5 pull-left">
-            <h2>Tables</h2>
-        </div>
-        <div class="col-md-4 pull-right">
-            <button class="btn btn-primary add-instance" id="add-table" data-href="/tables"
-                    data-modal-id="table-create-modal">Add Table
-            </button>
+            <h2>Assigned Tables</h2>
         </div>
         <div class="table-responsive col-md-10">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>Table Name</th>
-                    <th>User</th>
+                    <th>Has Order</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="table: ${tables}" class="instance-wrapper">
                     <td>
-                        <input type="text" name="name" th:value="${table.name}" class="form-control" placeholder="Name">
+                        <span th:text="${table.name}"></span>
                     </td>
                     <td>
-                        <select id="user-assign" class="form-control" th:data-table-id="${table.id}">
-                            <option value="-1">Select User</option>
-                            <option
-                                    th:each="user: ${users}"
-                                    th:text="${user.username}"
-                                    th:value="${user.id}"
-                                    th:selected="${null != table.user && table.user.id == user.id}"></option>
-                        </select>
+                        Yes
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/tables/' + ${table.id}">
+                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/tables/manager/' + ${table.id}">
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
-                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/tables/' + ${table.id}}">
+                        <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/tables/manager/' + ${table.id}}">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                     </td>
@@ -58,7 +46,6 @@
             </table>
         </div>
     </div>
-
 </div>
 
 <div th:replace="common/header :: table-create-modal"/>

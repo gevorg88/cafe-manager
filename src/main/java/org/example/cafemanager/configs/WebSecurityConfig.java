@@ -59,12 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/",
                         "/login"
                 ).permitAll()
-                .antMatchers("/welcome")
+                .antMatchers("/welcome", "/tables")
                 .authenticated()
                 .antMatchers(
                         "/users",
-                        "/tables",
-                        "/tables/**",
+                        "/tables/manager/**",
                         "/users/**",
                         "/products",
                         "/products/**"
@@ -73,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/orders",
                         "/orders/**",
-                        "/waiters/**"
+                        "/tables/waiter/**"
                 ).hasAuthority(Role.WAITER.getAuthority())
                 .and()
                 .formLogin()

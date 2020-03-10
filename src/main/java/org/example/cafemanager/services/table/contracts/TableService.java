@@ -1,6 +1,7 @@
 package org.example.cafemanager.services.table.contracts;
 
 import org.example.cafemanager.domain.CafeTable;
+import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.table.TableCreate;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
@@ -17,4 +18,6 @@ public interface TableService {
     void destroyTable(Long tableId);
 
     CafeTable update(Long id, TableCreateRequestBody requestBody);
+
+    Collection<OnlyTableProps> getUserAssignedTables(Long id);
 }
