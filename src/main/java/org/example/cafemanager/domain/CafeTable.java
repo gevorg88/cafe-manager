@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tables")
@@ -18,8 +19,8 @@ public class CafeTable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "cafeTable")
-    private Order order;
+    @OneToMany(mappedBy = "cafeTable", fetch = FetchType.EAGER)
+    private Set<Order> orders;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,12 +50,20 @@ public class CafeTable {
         this.user = user;
     }
 
-    public Order getOrder() {
-        return this.order;
+    public Set<Order> getOrders() {
+        return this.orders;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+    }
+
+    public boolean removeOrder(Order order) {
+        return this.orders.remove(order);
     }
 
     @Override

@@ -14,9 +14,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(
             name = "table_id",
             nullable = false,

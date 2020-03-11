@@ -4,6 +4,7 @@ import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.table.TableCreate;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
 import org.example.cafemanager.dto.CreateAjaxResponse;
+import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.table.contracts.TableService;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -19,6 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 
 @Controller
 @RequestMapping("/tables")
@@ -39,7 +41,8 @@ public class TableController {
             model.addAttribute("users", userService.getAllWaiters());
             return "table/list";
         }
-        model.addAttribute("tables", tableService.getUserAssignedTables(user.getId()));
+        Collection<TableWithOpenOrdersCount> tab = tableService.getUserAssignedTablesWithCount(user.getId());
+        model.addAttribute("tables", tableService.getUserAssignedTablesWithCount(user.getId()));
         return "table/waiter-list";
     }
 

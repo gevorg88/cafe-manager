@@ -15,6 +15,7 @@ public class ProductsInOrder {
     @Column(name = "status")
     private ProdInOrderStatus status;
 
+    @Column(name = "amount")
     private Integer amount = 0;
 
     @JoinColumn(name = "order_id")
@@ -27,6 +28,46 @@ public class ProductsInOrder {
 
     public ProductsInOrder() {
         this.status = ProdInOrderStatus.ORDERED;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ProdInOrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProdInOrderStatus status) {
+        this.status = status;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override

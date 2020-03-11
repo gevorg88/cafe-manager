@@ -2,10 +2,7 @@ package org.example.cafemanager.services.table;
 
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
-import org.example.cafemanager.dto.table.OnlyTableProps;
-import org.example.cafemanager.dto.table.SimpleTableProps;
-import org.example.cafemanager.dto.table.TableCreate;
-import org.example.cafemanager.dto.table.TableCreateRequestBody;
+import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.CafeTableRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -18,7 +15,9 @@ import java.util.Collection;
 
 @Service
 public class TableServiceImpl implements TableService {
+
     private final CafeTableRepository tableRepo;
+
     private final UserService userService;
 
     @Autowired
@@ -108,5 +107,10 @@ public class TableServiceImpl implements TableService {
     @Override
     public Collection<OnlyTableProps> getUserAssignedTables(Long id) {
         return tableRepo.getAllByUserIdIs(id);
+    }
+
+    @Override
+    public Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithCount(Long id) {
+        return this.tableRepo.userTablesWithOrders(id);
     }
 }

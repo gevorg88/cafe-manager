@@ -3,7 +3,10 @@ package org.example.cafemanager.repositories;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
+import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
@@ -22,4 +25,9 @@ public interface CafeTableRepository extends CrudRepository<CafeTable, Long> {
     CafeTable findCafeTableByNameAndIdIsNot(@NotNull String name, @NotNull Long id);
 
     Collection<OnlyTableProps> getAllByUserIdIs(@NotNull Long id);
+
+    @Query(value = "select t.id as id, t.name as name, count(o.id) as orderCount from CafeTable t " +
+            "left join Order o on o.cafeTable.id = t.id and o.status = 'opended'" +
+            "where t.user.id = :id GROUP BY t.id")
+    Collection<TableWithOpenOrdersCount> userTablesWithOrders(@NotNull @Param ("id") Long id);
 }
