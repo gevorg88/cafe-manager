@@ -19,7 +19,7 @@ public class CafeTable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "cafeTable", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cafeTable")
     private Set<Order> orders;
 
     @ManyToOne

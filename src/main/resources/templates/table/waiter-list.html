@@ -25,14 +25,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="table: ${tables}" class="instance-wrapper">
+                <tr th:each="table: ${tables}" class="instance-wrapper" >
                     <td>
                         <span th:text="${table.name}"></span>
                     </td>
-                    <td th:text="${table.orderCount > 0 ? 'No' : 'Yes'}">
+                    <td th:with="isOpen=${table.orderCount == 0}">
+                        <span th:text="${isOpen ? 'YES': 'NO'}"></span>
                     </td>
-                    <td class="text-center">
-                        <a class="btn btn-primary btn-xs create-order" th:href="'/orders/create/' + ${table.id}">
+                    <td class="text-center" th:with="isOpen=${table.orderCount == 0}">
+                        <a class="btn btn-primary btn-xs create-order"
+                           th:classappend="${isOpen ? '' : 'hidden'}"
+                           th:href="${isOpen ? ('/orders/create/' + table.id) : ''}">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>
