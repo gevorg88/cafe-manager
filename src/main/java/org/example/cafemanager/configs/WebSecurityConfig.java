@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).hasAuthority(Role.WAITER.getAuthority())
                 .and()
                 .formLogin()
-                .failureUrl("/login?error=error")
+                .failureUrl("/login?error=Wrong Credentials")
                 .loginPage("/login")
                 .usernameParameter("username")
                 .defaultSuccessUrl("/welcome")

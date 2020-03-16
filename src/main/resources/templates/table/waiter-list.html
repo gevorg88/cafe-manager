@@ -21,11 +21,11 @@
                 <tr>
                     <th>Table Name</th>
                     <th>Is Open</th>
-                    <th>Actions</th>
+                    <th>Manage Orders</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="table: ${tables}" class="instance-wrapper" >
+                <tr th:each="table: ${tables}" class="instance-wrapper">
                     <td>
                         <span th:text="${table.name}"></span>
                     </td>
@@ -35,8 +35,8 @@
                     <td class="text-center" th:with="isOpen=${table.orderCount == 0}">
                         <a class="btn btn-primary btn-xs create-order"
                            th:classappend="${isOpen ? '' : 'hidden'}"
-                           th:href="${isOpen ? ('/orders/create/' + table.id) : ''}">
-                            <i class="glyphicon glyphicon-edit"></i>
+                           th:href="${isOpen ? ('/orders/manage/' + table.id) : ''}">
+                            <i class="glyphicon glyphicon-cutlery"></i>
                         </a>
                     </td>
                 </tr>

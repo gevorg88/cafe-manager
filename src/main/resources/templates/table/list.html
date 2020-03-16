@@ -41,7 +41,7 @@
                                     th:each="user: ${users}"
                                     th:text="${user.username}"
                                     th:value="${user.id}"
-                                    th:selected="${null != table.user && table.user.id == user.id}"></option>
+                                    th:selected="${null != table.user && table.user.id.equals(user.id)}"></option>
                         </select>
                     </td>
                     <td class="text-center">

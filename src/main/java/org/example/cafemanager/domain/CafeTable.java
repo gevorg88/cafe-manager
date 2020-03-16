@@ -1,5 +1,6 @@
 package org.example.cafemanager.domain;
 
+import org.example.cafemanager.domain.enums.Status;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -64,6 +65,15 @@ public class CafeTable {
 
     public boolean removeOrder(Order order) {
         return this.orders.remove(order);
+    }
+
+    public boolean hasOpenTables() {
+        return this.orders
+                .stream()
+                .anyMatch((order -> order
+                        .getStatus()
+                        .equals(Status.OPEN)
+                ));
     }
 
     @Override

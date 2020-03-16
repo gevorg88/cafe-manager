@@ -21,8 +21,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(
             name = "table_id",
-            nullable = false,
-            unique = true
+            nullable = false
     )
     private CafeTable cafeTable;
 

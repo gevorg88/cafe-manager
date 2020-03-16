@@ -30,7 +30,6 @@
 
             <div id="navbar" class="navbar-header" sec:authorize="hasAuthority('WAITER')" th:fragment="navigation">
                 <a class="navbar-brand" th:href="@{/tables}">Assigned Tables</a>
-                <a class="navbar-brand" th:href="@{/orders}">Orders</a>
             </div>
 
             <div class="navbar-header pull-right" th:if="${#authorization.expression('isAuthenticated()')}">
@@ -44,7 +43,8 @@
 </div>
 <div sec:authorize="hasAuthority('MANAGER')" th:fragment="user-create-modal" th:insert="~{modals/user/create-modal :: create-modal}"/>
 <div sec:authorize="hasAuthority('MANAGER')" th:fragment="table-create-modal" th:insert="~{modals/table/create-modal :: create-modal}"/>
-<div sec:authorize="hasAuthority('MANAGER')" th:fragment="table-create-modal" th:insert="~{modals/product/create-modal :: create-modal}"/>
+<div sec:authorize="hasAuthority('MANAGER')" th:fragment="product-create-modal" th:insert="~{modals/product/create-modal :: create-modal}"/>
+<div sec:authorize="hasAuthority('WAITER')"  th:fragment="order-create-modal" th:insert="~{modals/order/create-modal :: create-modal}"/>
 <div th:fragment="body-bottom-scripts">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>

@@ -113,4 +113,13 @@ public class TableServiceImpl implements TableService {
     public Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithCount(Long id) {
         return this.tableRepo.userTablesWithOrders(id);
     }
+
+    @Override
+    public CafeTable getUserAssignedTable(Long tableID, User user) {
+        CafeTable table = tableRepo.findCafeTableByIdAndUser(tableID, user);
+        if (null == table) {
+            throw new InstanceNotFoundException("table");
+        }
+        return table;
+    }
 }

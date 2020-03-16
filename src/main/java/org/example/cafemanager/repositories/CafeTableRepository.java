@@ -1,6 +1,7 @@
 package org.example.cafemanager.repositories;
 
 import org.example.cafemanager.domain.CafeTable;
+import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
@@ -29,5 +30,7 @@ public interface CafeTableRepository extends CrudRepository<CafeTable, Long> {
     @Query(value = "select t.id as id, t.name as name, count(o.id) as orderCount from CafeTable t " +
             "left join Order o on o.cafeTable.id = t.id and o.status = 'opended'" +
             "where t.user.id = :id GROUP BY t.id")
-    Collection<TableWithOpenOrdersCount> userTablesWithOrders(@NotNull @Param ("id") Long id);
+    Collection<TableWithOpenOrdersCount> userTablesWithOrders(@NotNull @Param("id") Long id);
+
+    CafeTable findCafeTableByIdAndUser(@NotNull Long tableId, @NotNull User user);
 }
