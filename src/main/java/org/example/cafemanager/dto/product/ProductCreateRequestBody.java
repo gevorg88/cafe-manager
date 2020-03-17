@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Component
 public class ProductCreateRequestBody {
     @NotBlank(message = "Product name is required")
-    @Length(max = 32, min = 6, message = "Product name must contain at from 6 to 32 symbols")
+    @Length(max = 32, min = 3, message = "Product name must contain at from 3 to 32 symbols")
     private String name;
 
     public String getName() {

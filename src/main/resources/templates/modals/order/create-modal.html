@@ -7,13 +7,13 @@
                 </button>
                 <h4 class="modal-title">Create Order</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body row">
                 <p class="errors"></p>
-                <form id="user-create">
+                <form id="order-create" class="form-inline col-md-12">
                     <div class="col-md-12 product-row" id="product-form">
-                        <div class="form-group col-md-5">
+                        <div class="form-group col-md-8">
                             <label for="product">Select Product</label>
-                            <select class="form-control" name="product" id="product">
+                            <select class="form-control" name="product" data-type="input">
                                 <option th:if="${null != products}"
                                         th:value="${products.id}"
                                         th:each="product:products"
@@ -21,17 +21,17 @@
                                 ></option>
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="amount">Amount</label>
-                            <input class="form-control" name="amount" id="amount" placeholder="Product Amount" type="number">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <button class="btn btn-xs btn-primary">
-                                <span>+</span>
-                            </button>
+                            <input class="form-control" name="amount" id="amount" type="number" min="1" data-type="input">
                         </div>
                     </div>
                 </form>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" id="product-cloner" type="button">
+                        <span>+</span>
+                    </button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
