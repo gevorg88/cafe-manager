@@ -13,3 +13,12 @@ footer {
 footer p {
     padding: 15px;
 }
+
+#product-cloner {
+    margin-top: 10px;
+    width: 50%;
+}
+
+.remove-prod{
+    margin-top: 23px;
+}

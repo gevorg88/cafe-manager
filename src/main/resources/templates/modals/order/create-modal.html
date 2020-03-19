@@ -7,31 +7,28 @@
                 </button>
                 <h4 class="modal-title">Create Order</h4>
             </div>
-            <div class="modal-body row">
+            <div class="modal-body">
                 <p class="errors"></p>
-                <form id="order-create" class="form-inline col-md-12">
-                    <div class="col-md-12 product-row" id="product-form">
-                        <div class="form-group col-md-8">
+                <form id="order-create" class="col-md-12">
+                    <div class="form-group product-row">
+                        <div class="col-md-7">
                             <label for="product">Select Product</label>
-                            <select class="form-control" name="product" data-type="input">
+                            <select class="form-control" name="order[0][productId]" data-type="input" id="product" data-name="productId">
                                 <option th:if="${null != products}"
                                         th:value="${products.id}"
                                         th:each="product:products"
-                                        th:text="${product.name}"
-                                ></option>
+                                        th:text="${product.name}"></option>
                             </select>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="col-md-3">
                             <label for="amount">Amount</label>
-                            <input class="form-control" name="amount" id="amount" type="number" min="1" data-type="input">
+                            <input class="form-control" name="order[0][amount]" id="amount" type="number" min="1" data-type="input" data-name="amount">
                         </div>
                     </div>
                 </form>
-                <div class="col-md-12">
-                    <button class="btn btn-primary" id="product-cloner" type="button">
-                        <span>+</span>
-                    </button>
-                </div>
+                <button class="btn btn-primary center-block" id="product-cloner">
+                    <span>Add Product</span>
+                </button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

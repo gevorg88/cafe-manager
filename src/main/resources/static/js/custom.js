@@ -4,7 +4,14 @@ $(function () {
             {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
     });
 
-    var _document = $(document);
+    var _document = $(document),
+        removeIcon = '<div class="col-md-1 remove-prod">' +
+            '<label></label>' +
+            '<button class="btn btn-danger" type="button">' +
+            '<i class="glyphicon glyphicon-remove"></i> ' +
+            '</button>' +
+            '</div>';
+
     var swalDeleteConf = {
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -162,18 +169,31 @@ $(function () {
                     });
                 }
             });
-
         })
 
         .on('click', '#product-cloner', function () {
-            var form = $(this).closest('form'),
+            var form = $(this).closest('.modal-body').find('form'),
                 productRow = form.find('.product-row');
 
-            var cloned = productRow.clone();
+            var cloned = productRow.eq(0).clone();
             cloned.find('[data-type="input"]').each(function (index, item) {
-                $(item).val('');
+                var _it = $(item),
+                    namePart = 'order[' + productRow.length + ']',
+                    name = _it.attr('data-name');
+
+                if ('amount' === _it.attr('data-name')) {
+                    _it.attr('name', namePart + '[' + name + ']');
+                }
+
+                if ('productId' === _it.attr('data-name')) {
+                    _it.attr('name', namePart + '[' + name + ']');
+                }
+                _it.val('');
             });
+            cloned.append(removeIcon);
             form.append(cloned);
-        });
-    // product-cloner
+        })
+        .on('click', '.remove-prod', function () {
+            $(this).closest('.product-row').remove();
+        })
 });
