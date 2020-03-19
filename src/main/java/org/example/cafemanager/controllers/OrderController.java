@@ -6,6 +6,7 @@ import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.order.contracts.OrderService;
+import org.example.cafemanager.services.product.contracts.ProductService;
 import org.example.cafemanager.services.table.contracts.TableService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,16 @@ import java.util.Set;
 public class OrderController {
     private final OrderService orderService;
     private final TableService tableService;
+    private final ProductService productService;
 
     public OrderController(
             OrderService orderService,
-            TableService tableService
+            TableService tableService,
+            ProductService productService
     ) {
         this.orderService = orderService;
         this.tableService = tableService;
+        this.productService = productService;
     }
 
     @GetMapping("/manage/{tableId}")
@@ -43,6 +47,7 @@ public class OrderController {
             model.addAttribute("table", tableService.getUserAssignedTable(tableId, user));
             model.addAttribute("orders", orders);
             model.addAttribute("statuses", Status.getEnumMapValues());
+            model.addAttribute("products", productService.getAllProducts());
         } catch (InstanceNotFoundException e) {
             model.addAttribute("error", e.getMessage());
         }
