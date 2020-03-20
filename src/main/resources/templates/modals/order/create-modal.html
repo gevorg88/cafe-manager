@@ -14,16 +14,17 @@
                     <div class="form-group product-row">
                         <div class="col-md-7">
                             <label for="product">Select Product</label>
-                            <select class="form-control" name="order[0][productId]" data-type="input" id="product" data-name="productId">
+                            <select class="form-control" name="order[productId]" data-type="input" id="product" data-name="productId">
                                 <option
-                                        th:each="product:${products}"
+                                        th:each="product, iterator:${products}"
+                                        th:selected="${0 == iterator.index}"
                                         th:value="${product.id}"
                                         th:text="${product.name}"></option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label for="amount">Amount</label>
-                            <input class="form-control" name="order[0][amount]" id="amount" type="number" min="1" data-type="input" data-name="amount">
+                            <input class="form-control" name="order[amount]" id="amount" type="number" min="1" data-type="input" data-name="amount" value="1">
                         </div>
                     </div>
                 </form>
@@ -33,7 +34,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary save-modal-data" data-href="/orders">Save</button>
+                <button type="button" class="btn btn-primary save-modal-data" th:data-href="/orders/create/ + table.id}">Save</button>
             </div>
         </div>
     </div>

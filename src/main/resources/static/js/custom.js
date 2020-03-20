@@ -183,17 +183,31 @@ $(function () {
 
                 if ('amount' === _it.attr('data-name')) {
                     _it.attr('name', namePart + '[' + name + ']');
+                    _it.val(1);
                 }
 
                 if ('productId' === _it.attr('data-name')) {
                     _it.attr('name', namePart + '[' + name + ']');
+                    _it.val(_it.find('option').eq(0).val());
                 }
-                _it.val('');
             });
             cloned.append(removeIcon);
             form.append(cloned);
         })
+
         .on('click', '.remove-prod', function () {
             $(this).closest('.product-row').remove();
         })
+
+        // .on('click', '.save-modal-data', function () {
+        //     var form = $(this)
+        //         .closest('.modal-dialog')
+        //         .find('form'),
+        //         formData = form.serializeArray(),
+        //         prod = [];
+        //
+        //     formData.forEach(function (index, value) {
+        //         var _d =
+        //     });
+        // });
 });
