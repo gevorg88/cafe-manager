@@ -42,6 +42,13 @@ $(function () {
                     resolve();
                 }, _timeout);
             })
+        },
+        parseInteger = function (value) {
+            var _val = parseInt(value);
+            if (isNaN(_val)) {
+                return null;
+            }
+            return _val;
         };
 
     _document.on('click', '.add-instance', function () {
@@ -54,16 +61,17 @@ $(function () {
         modal.modal('show');
     })
 
-        .on('click', '.save-modal-data', function () {
+        .on('click', '.save-modal-data', function (e, eventData) {
             var _this = $(this),
                 modal = _this.closest('.modal'),
                 form = modal.find('form'),
                 formData = form.serializeArray(),
-                href = _this.attr('data-href');
+                href = eventData && eventData.hasOwnProperty('setHref') ? eventData['setHref'] : _this.attr('data-href');
             if (!href) {
                 return toastr.error("Wrong url!");
             }
-            var data = retrieveFromForm(formData);
+            var data = eventData && eventData.hasOwnProperty('setData') ? eventData['setData'] : retrieveFromForm(formData);
+            console.log(JSON.stringify(data));
             $.ajax({
                 url: href,
                 method: 'POST',
@@ -199,15 +207,25 @@ $(function () {
             $(this).closest('.product-row').remove();
         })
 
-        // .on('click', '.save-modal-data', function () {
-        //     var form = $(this)
-        //         .closest('.modal-dialog')
-        //         .find('form'),
-        //         formData = form.serializeArray(),
-        //         prod = [];
-        //
-        //     formData.forEach(function (index, value) {
-        //         var _d =
-        //     });
-        // });
+        .on('click', '.save-order', function () {
+            var _this = $(this),
+                form = _this
+                    .closest('.modal-dialog')
+                    .find('form'),
+                prodRow = form.find('.product-row'),
+                dataArray = [];
+
+            prodRow.each(function (index, row) {
+                var _row = $(row);
+                dataArray.push({
+                    productId: parseInteger(_row.find('[data-name="productId"]').val()),
+                    amount: parseInteger(_row.find('[data-name="amount"]').val())
+                });
+            });
+            var data = {
+                setData: {products: dataArray},
+                setHref: _this.attr('data-href')
+            };
+            $('.save-modal-data').trigger('click', [data]);
+        });
 });

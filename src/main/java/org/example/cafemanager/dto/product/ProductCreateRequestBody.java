@@ -1,13 +1,13 @@
 package org.example.cafemanager.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotBlank;
 
-@Component
 public class ProductCreateRequestBody {
     @NotBlank(message = "Product name is required")
     @Length(max = 32, min = 3, message = "Product name must contain at from 3 to 32 symbols")
+    @JsonProperty("name")
     private String name;
 
     public String getName() {

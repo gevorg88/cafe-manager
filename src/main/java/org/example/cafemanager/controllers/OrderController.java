@@ -5,6 +5,9 @@ import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.CreateAjaxResponse;
+import org.example.cafemanager.dto.order.OrderCreateRequest;
+import org.example.cafemanager.dto.order.ProductInOrderList;
+import org.example.cafemanager.dto.order.ProductInOrderReq;
 import org.example.cafemanager.dto.table.TableCreate;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
@@ -14,6 +17,7 @@ import org.example.cafemanager.services.product.contracts.ProductService;
 import org.example.cafemanager.services.table.contracts.TableService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -61,28 +68,31 @@ public class OrderController {
         return viewPath;
     }
 
-//    @PostMapping("/create/{tableId}")
-//    public ResponseEntity<?> store(
-//            @PathVariable("tableId")
-//            @Valid @RequestBody OrderCreateRequest requestBody,
-//            Errors errors
-//    ) {
-//        CreateAjaxResponse result = new CreateAjaxResponse();
-//        if (errors.hasErrors()) {
-//            result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
-//            return ResponseEntity.unprocessableEntity().body(result);
-//        }
+    @PostMapping(path = "/create/{tableId}")
+    public ResponseEntity<?> store(
+            @PathVariable("tableId")
+            @RequestBody
+                    OrderCreateRequest requestBody,
+            Errors errors
+    ) {
+        CreateAjaxResponse result = new CreateAjaxResponse();
+
+        System.out.println(requestBody);
+        if (errors.hasErrors()) {
+            result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
+            return ResponseEntity.unprocessableEntity().body(result);
+        }
 //        TableCreate createDto = new TableCreate(requestBody.getName());
-//        try {
+        try {
 //            tableService.createTable(createDto);
-//            result.setMessage("Table has been successfully created");
-//        } catch (MustBeUniqueException e) {
-//            result.setMessage(e.getMessage());
-//            return ResponseEntity.unprocessableEntity().body(result);
-//        } catch (Exception e) {
-//            result.setMessage("Something goes wrong! Try again later");
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-//        }
-//        return ResponseEntity.ok(result);
-//    }
+            result.setMessage("Table has been successfully created");
+        } catch (MustBeUniqueException e) {
+            result.setMessage(e.getMessage());
+            return ResponseEntity.unprocessableEntity().body(result);
+        } catch (Exception e) {
+            result.setMessage("Something goes wrong! Try again later");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+        return ResponseEntity.ok(result);
+    }
 }
