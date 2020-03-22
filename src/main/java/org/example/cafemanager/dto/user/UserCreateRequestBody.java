@@ -1,12 +1,9 @@
 package org.example.cafemanager.dto.user;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Component
 public class UserCreateRequestBody {
     @NotBlank(message = "First Name is required")
     @Length(max = 32, min = 5, message = "First name must contain at from 5 to 32 symbols")

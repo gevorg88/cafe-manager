@@ -16,4 +16,6 @@ public interface ProductService {
     Product createProduct(ProductCreate createDto);
 
     Product update(Long id, ProductCreateRequestBody requestBody);
+
+    Product findOneById(Long productId);
 }

@@ -1,7 +1,5 @@
 package org.example.cafemanager.domain;
 
-import org.example.cafemanager.domain.enums.ProdInOrderStatus;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -12,22 +10,25 @@ public class ProductsInOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "status")
-    private ProdInOrderStatus status;
-
-    @Column(name = "amount")
-    private Integer amount = 0;
-
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id",  nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
 
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
+    @Column(name = "amount", nullable = false)
+    private Integer amount = 1;
+
     public ProductsInOrder() {
-        this.status = ProdInOrderStatus.ORDERED;
+
+    }
+
+    public ProductsInOrder(Integer amount, Product product, Order order) {
+        this.product = product;
+        this.amount = amount;
+        this.order = order;
     }
 
     public Long getId() {
@@ -36,14 +37,6 @@ public class ProductsInOrder {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public ProdInOrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ProdInOrderStatus status) {
-        this.status = status;
     }
 
     public Integer getAmount() {
@@ -81,5 +74,15 @@ public class ProductsInOrder {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ProductsInOrder{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", order=" + order +
+                ", product=" + product +
+                '}';
     }
 }

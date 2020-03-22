@@ -12,7 +12,7 @@ drop table if exists users;
 create table orders
 (
     id       bigint not null auto_increment,
-    status   integer,
+    status   varchar(255) not null,
     table_id bigint not null,
     primary key (id)
 ) engine = InnoDB;
@@ -26,15 +26,14 @@ create table products
 
 create table products_in_order
 (
-    id         bigint not null,
+    id        bigint not null auto_increment,
     amount     integer,
-    status     integer,
-    order_id   bigint not null auto_increment,
+    order_id   bigint not null,
     product_id bigint not null,
-    primary key (order_id, product_id)
+    primary key (id)
 ) engine = InnoDB;
 
-create table tables
+create table cafe_tables
 (
     id      bigint not null auto_increment,
     name    varchar(255),

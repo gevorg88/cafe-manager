@@ -1,15 +1,10 @@
 package org.example.cafemanager.dto.order;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 
 public class ProductInOrderReq implements Serializable {
-    @JsonProperty("amount")
     private Integer amount = 1;
 
-    @JsonProperty("productId")
     private Long productId;
 
     public Integer getAmount() {
