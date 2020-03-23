@@ -25,27 +25,50 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th># <span
-                                class="btn"
-                                id="expand-products"
-                                data-toggle="collapse"
-                                href="#products"
-                                aria-expanded="false"
-                                aria-controls="products"> (Click to see products)</span></th>
+                        <th>#</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="oder, iterator : ${orders}" class="instance-wrapper">
-                        <td th:text="${iterator.index}"></td>
+                    <tr th:each="order, iterator : ${orders}" class="instance-wrapper">
                         <td>
-                            <select name="status" id="order-status">
+                            <span class="btn collapsed" data-toggle="collapse" th:href="${'#products-' + iterator.index}" aria-expanded="false" aria-controls="products" th:text="${iterator.index + 1 + '(Click to see products)'}"></span>
+                            <div th:id="${'products-' + iterator.index}" class="collapse" style="height: 0">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:with="pios = ${order.productsInOrders}">
+                                    <tr th:each="pio : ${pios}">
+                                        <td th:text="${pio.product.name}"></td>
+                                        <td>
+                                            <input type="number" name="amount" th:value="${pio.amount}">
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-danger btn-xs instance-delete" th:data-href="@{'/orders/' + ${order.id} +  '/pio/' + ${pio.id}}">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                            <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/orders/' + ${order.id} +  '/pio/' + ${pio.id}}">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td>
+                            <select name="status" class="order-status" th:data-href="@{'/orders/change-status/' + ${order.id}}">
                                 <option
-                                        th:each="${status:statuses}"
+                                        th:each="status: ${statuses}"
                                         th:text="${status.value}"
                                         th:value="${status.key}"
-                                        th:selected="${order.status.equals(status)}">
+                                        th:selected="${order.status.toString().equals(status.key)}">
 
                                 </option>
                             </select>
@@ -53,9 +76,6 @@
                         <td class="text-center">
                             <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/orders/' + ${order.id}">
                                 <i class="glyphicon glyphicon-remove"></i>
-                            </a>
-                            <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/orders/' + ${order.id}}">
-                                <i class="glyphicon glyphicon-pencil"></i>
                             </a>
                         </td>
                     </tr>

@@ -11,11 +11,11 @@ public class ProductsInOrder {
     private Long id;
 
     @JoinColumn(name = "order_id",  nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Order order;
 
     @JoinColumn(name = "product_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Product product;
 
     @Column(name = "amount", nullable = false)

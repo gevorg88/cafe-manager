@@ -71,7 +71,6 @@ $(function () {
                 return toastr.error("Wrong url!");
             }
             var data = eventData && eventData.hasOwnProperty('setData') ? eventData['setData'] : retrieveFromForm(formData);
-            console.log(JSON.stringify(data));
             $.ajax({
                 url: href,
                 method: 'POST',
@@ -144,9 +143,9 @@ $(function () {
             });
         })
 
-        .on('click', '.edit-instance', function () {
+        .on('click', '.edit-instance', function (e, eventData) {
             var _this = $(this),
-                url = _this.attr('data-href'),
+                url = eventData && eventData.hasOwnProperty('setHref') ? eventData['setHref'] : _this.attr('data-href'),
                 data = {},
                 elements = _this.closest('tr').find('input');
 
@@ -154,7 +153,9 @@ $(function () {
                 var _input = $(input);
                 data[_input.attr('name')] = _input.val();
             });
-
+            if (eventData && eventData.hasOwnProperty('setData')) {
+                data = eventData['setData'];
+            }
             if (!url) {
                 return toastr.error("Wrong url!");
             }
@@ -227,5 +228,18 @@ $(function () {
                 setHref: _this.attr('data-href')
             };
             $('.save-modal-data').trigger('click', [data]);
+        })
+
+        .on('change', '.order-status', function () {
+            var _this = $(this),
+                href = _this.attr('data-href'),
+                status = _this.val(),
+                data = {
+                    setData: {
+                        status: status
+                    },
+                    setHref: href
+                };
+            $('.edit-instance').trigger('click', [data]);
         });
 });

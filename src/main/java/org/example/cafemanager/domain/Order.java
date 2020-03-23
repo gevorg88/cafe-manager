@@ -52,6 +52,10 @@ public class Order {
         this.productsInOrders.add(productsInOrder);
     }
 
+    public boolean removeProductInOrder(ProductsInOrder pio) {
+        return productsInOrders.remove(pio);
+    }
+
     public Set<Product> getProducts() {
         return products;
     }
