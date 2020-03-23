@@ -33,7 +33,7 @@ public class Order {
     )
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
     private Set<ProductsInOrder> productsInOrders = new HashSet<>();
 
     public Order() {

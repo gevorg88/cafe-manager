@@ -52,7 +52,6 @@ public class ProductsController {
             return ResponseEntity.unprocessableEntity().body(result);
         } catch (Exception e) {
             result.setMessage("Something goes wrong! Try again later");
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
         return ResponseEntity.ok(result);

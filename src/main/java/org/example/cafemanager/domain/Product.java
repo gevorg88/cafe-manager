@@ -24,7 +24,7 @@ public class Product {
     @ManyToMany(mappedBy = "products")
     private Set<Order> orders = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private Set<ProductsInOrder> productsInOrders = new HashSet<>();
 
     public Set<ProductsInOrder> getProductsInOrders() {

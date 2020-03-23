@@ -42,7 +42,7 @@
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.email}"></td>
                     <td>
-                        <a class="btn btn-danger btn-xs" th:data-href="'/users/' + ${user.id}">
+                        <a class="btn btn-danger btn-xs instance-delete" th:data-href="'/users/' + ${user.id}">
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
                         <a class="btn btn-primary btn-xs edit-instance" th:data-href="@{'/users/' + ${user.id}}">

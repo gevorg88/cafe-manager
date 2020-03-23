@@ -92,7 +92,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void destroyOrder(Long orderId, User user) {
         Order order = getOrderByIdAndUser(orderId, user);
-        productsInOrderRepository.deleteProductsInOrderByOrder(order);
+        order.setProductsInOrders(new HashSet<>());
+        productsInOrderRepository.deleteAll(order.getProductsInOrders());
         orderRepository.delete(order);
     }
 

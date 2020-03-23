@@ -100,4 +100,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> destroy(@PathVariable("userId") Long userId) {
+
+    }
 }

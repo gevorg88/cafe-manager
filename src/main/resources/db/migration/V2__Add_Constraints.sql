@@ -15,12 +15,14 @@ alter table orders
 alter table products_in_order
     add constraint products_in_order_to_orders_fk
         foreign key (`order_id`)
-            references orders (id);
+            references orders (id)
+            ON DELETE CASCADE ON UPDATE NO ACTION;
 
 alter table products_in_order
     add constraint products_in_order_to_products_fk
         foreign key (`product_id`)
-            references products (id);
+            references products (id)
+            ON DELETE CASCADE ON UPDATE NO ACTION;
 
 alter table cafe_tables
     add constraint cafe_tables_to_users_fk
