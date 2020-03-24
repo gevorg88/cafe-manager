@@ -1,9 +1,6 @@
 package org.example.cafemanager.dto;
 
-import org.springframework.stereotype.Component;
-
-@Component
-public class CreateAjaxResponse {
+public class ResponseModel {
     private String message;
 
     public String getMessage() {

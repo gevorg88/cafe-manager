@@ -1,13 +1,18 @@
 package org.example.cafemanager.dto.user;
 
-public class UserCreate {
+import java.io.Serializable;
+
+public class CreateUserRequest implements Serializable {
     private String username;
     private String password;
     private String email;
     private String firstName;
     private String lastName;
 
-    public UserCreate(String username, String password, String email) {
+    public CreateUserRequest() {
+    }
+
+    public CreateUserRequest(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;

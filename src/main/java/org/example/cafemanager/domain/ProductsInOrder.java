@@ -7,7 +7,7 @@ import java.util.Objects;
 @Table(name = "products_in_order")
 public class ProductsInOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @JoinColumn(name = "order_id",  nullable = false)

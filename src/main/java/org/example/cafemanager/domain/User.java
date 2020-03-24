@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Entity
 @Component
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

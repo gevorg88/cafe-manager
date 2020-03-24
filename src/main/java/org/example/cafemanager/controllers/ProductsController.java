@@ -2,7 +2,7 @@ package org.example.cafemanager.controllers;
 
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.dto.product.ProductCreateRequestBody;
-import org.example.cafemanager.dto.CreateAjaxResponse;
+import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.product.contracts.ProductService;
@@ -38,7 +38,7 @@ public class ProductsController {
             @Valid @RequestBody ProductCreateRequestBody requestBody,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
@@ -63,7 +63,7 @@ public class ProductsController {
             @PathVariable Long id,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
@@ -86,7 +86,7 @@ public class ProductsController {
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<?> destroy(@PathVariable("productId") Long productId) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
 
         try {
             productService.destroy(productId);

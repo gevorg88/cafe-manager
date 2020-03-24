@@ -4,7 +4,7 @@ import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
-import org.example.cafemanager.dto.CreateAjaxResponse;
+import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.order.*;
 import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
@@ -69,7 +69,7 @@ public class OrderController {
             @RequestBody OrderCreateRequest requestBody,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -96,7 +96,7 @@ public class OrderController {
             @PathVariable("orderId") Long orderId,
             @AuthenticationPrincipal User user
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         try {
             orderService.destroyOrder(orderId, user);
             result.setMessage("Order has been successfully deleted");
@@ -118,7 +118,7 @@ public class OrderController {
             @RequestBody OrderStatusUpdate orderStatus,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -145,7 +145,7 @@ public class OrderController {
             @RequestBody PioUpdateReq requestBody,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -177,7 +177,7 @@ public class OrderController {
             @PathVariable("pioId") Long pioId,
             @AuthenticationPrincipal User user
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         try {
             orderService.destroyProductInOrder(orderId, pioId, user);
             result.setMessage("Product In Order has been successfully deleted");

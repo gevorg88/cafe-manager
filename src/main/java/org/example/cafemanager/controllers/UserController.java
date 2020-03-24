@@ -1,8 +1,8 @@
 package org.example.cafemanager.controllers;
 
 import org.example.cafemanager.domain.User;
-import org.example.cafemanager.dto.CreateAjaxResponse;
-import org.example.cafemanager.dto.user.UserCreate;
+import org.example.cafemanager.dto.ResponseModel;
+import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.dto.user.UserCreateRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProps;
@@ -50,14 +50,14 @@ public class UserController {
             Errors errors
     ) {
         String password = SecurityUtility.randomPassword();
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         User user = null;
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
 
-        UserCreate createDto = new UserCreate(requestBody.getUsername(),
+        CreateUserRequest createDto = new CreateUserRequest(requestBody.getUsername(),
                 password,
                 requestBody.getEmail());
         try {
@@ -83,7 +83,7 @@ public class UserController {
             @Valid @RequestBody UserUpdateRequestBody requestBody,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
@@ -103,7 +103,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> destroy(@PathVariable("userId") Long userId) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         try {
             userService.destroyUser(userId);
             result.setMessage("User has been successfully deleted");

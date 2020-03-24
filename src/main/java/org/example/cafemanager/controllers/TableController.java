@@ -3,7 +3,7 @@ package org.example.cafemanager.controllers;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.table.TableCreate;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
-import org.example.cafemanager.dto.CreateAjaxResponse;
+import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.table.contracts.TableService;
@@ -51,7 +51,7 @@ public class TableController {
             @Valid @RequestBody TableCreateRequestBody requestBody,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
@@ -74,7 +74,7 @@ public class TableController {
     public ResponseEntity<?> assignUser(
             @PathVariable Long tableId,
             @PathVariable Long userId) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         try {
             String res = tableService.assignUser(tableId, userId);
             result.setMessage(String.format("User has been successfully %s", res));
@@ -90,7 +90,7 @@ public class TableController {
 
     @DeleteMapping("/manager/{tableId}")
     public ResponseEntity<?> destroy(@PathVariable Long tableId) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
 
         try {
             tableService.destroyTable(tableId);
@@ -111,7 +111,7 @@ public class TableController {
             @PathVariable Long id,
             Errors errors
     ) {
-        CreateAjaxResponse result = new CreateAjaxResponse();
+        ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);

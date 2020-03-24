@@ -3,26 +3,23 @@ package org.example.cafemanager.services.user;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.dto.user.UserPublicProps;
-import org.example.cafemanager.dto.user.UserCreate;
+import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.dto.user.UserUpdateRequestBody;
-import org.example.cafemanager.repositories.CafeTableRepository;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.UserRepository;
+import org.example.cafemanager.services.communication.NotificationService;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.table.contracts.TableService;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,12 +31,15 @@ public class UserServiceImpl implements UserService {
 
     private final OrderRepository orderRepository;
 
+    private final NotificationService notificationService;
+
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepo, OrderRepository orderRepository) {
+    public UserServiceImpl(UserRepository userRepo, OrderRepository orderRepository, final NotificationService notificationService) {
         this.userRepo = userRepo;
         this.orderRepository = orderRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -58,23 +58,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(UserCreate userCreate, Role role) {
-        if (findByUsername(userCreate.getUsername()) != null) {
+    public User createUser(CreateUserRequest createUserRequest, Role role) {
+        if (findByUsername(createUserRequest.getUsername()) != null) {
             throw new MustBeUniqueException("username");
         }
 
-        if (findByEmail(userCreate.getEmail()) != null) {
+        if (findByEmail(createUserRequest.getEmail()) != null) {
             throw new MustBeUniqueException("email");
         }
 
         User user = new User();
-        user.setUsername(userCreate.getUsername());
-        user.setEmail(userCreate.getEmail());
-        user.setPassword(SecurityUtility.passwordEncoder().encode(userCreate.getPassword()));
-        user.setFirstName(userCreate.getFirstName());
-        user.setLastName(userCreate.getLastName());
+        user.setUsername(createUserRequest.getUsername());
+        user.setEmail(createUserRequest.getEmail());
+        user.setPassword(SecurityUtility.passwordEncoder().encode(createUserRequest.getPassword()));
+        user.setFirstName(createUserRequest.getFirstName());
+        user.setLastName(createUserRequest.getLastName());
         user.setRole(role);
         save(user);
+        notificationService.notify(createUserRequest);
         return user;
     }
 
