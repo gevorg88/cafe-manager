@@ -18,4 +18,6 @@ public interface ProductService {
     Product update(Long id, ProductCreateRequestBody requestBody);
 
     Product findOneById(Long productId);
+
+    void destroy(Long productId);
 }

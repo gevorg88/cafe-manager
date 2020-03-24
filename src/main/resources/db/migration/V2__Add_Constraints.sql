@@ -10,7 +10,8 @@ alter table users
 alter table orders
     add constraint orders_to_cafe_tables_fk
         foreign key (`table_id`)
-            references cafe_tables (id);
+            references cafe_tables (id)
+            ON DELETE CASCADE ON UPDATE NO ACTION;
 
 alter table products_in_order
     add constraint products_in_order_to_orders_fk

@@ -12,7 +12,9 @@ import org.example.cafemanager.services.product.contracts.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -69,5 +71,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findOneById(Long productId) {
         return productRepository.findProductById(productId);
+    }
+
+    @Override
+    @Transactional
+    public void destroy(Long productId) {
+        Product product = this.findOneById(productId);
+
+        if (null == product) {
+            throw new InstanceNotFoundException("product");
+        }
+
+        product.setProductsInOrders(new HashSet<>());
+        productRepository.delete(product);
     }
 }

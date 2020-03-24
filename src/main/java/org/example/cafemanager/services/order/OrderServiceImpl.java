@@ -93,7 +93,6 @@ public class OrderServiceImpl implements OrderService {
     public void destroyOrder(Long orderId, User user) {
         Order order = getOrderByIdAndUser(orderId, user);
         order.setProductsInOrders(new HashSet<>());
-        productsInOrderRepository.deleteAll(order.getProductsInOrders());
         orderRepository.delete(order);
     }
 

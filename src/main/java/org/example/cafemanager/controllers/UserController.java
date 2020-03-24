@@ -103,6 +103,18 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> destroy(@PathVariable("userId") Long userId) {
-
+        CreateAjaxResponse result = new CreateAjaxResponse();
+        try {
+            userService.destroyUser(userId);
+            result.setMessage("User has been successfully deleted");
+            return ResponseEntity.ok(result);
+        } catch (InstanceNotFoundException e) {
+            result.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } catch (Exception e) {
+            e.getMessage();
+            result.setMessage("Something goes wrong! Try again later");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 }

@@ -25,4 +25,6 @@ public interface UserService {
     User getUserById(Long id);
 
     User update(Long id, UserUpdateRequestBody requestBody);
+
+    void destroyUser(Long userId);
 }

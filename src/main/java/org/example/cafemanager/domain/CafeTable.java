@@ -20,7 +20,7 @@ public class CafeTable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "cafeTable")
+    @OneToMany(mappedBy = "cafeTable", cascade = CascadeType.REMOVE)
     private Set<Order> orders;
 
     @ManyToOne

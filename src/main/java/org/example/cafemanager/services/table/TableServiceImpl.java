@@ -1,6 +1,7 @@
 package org.example.cafemanager.services.table;
 
 import org.example.cafemanager.domain.CafeTable;
+import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.CafeTableRepository;
@@ -11,7 +12,10 @@ import org.example.cafemanager.services.user.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class TableServiceImpl implements TableService {
@@ -49,6 +53,7 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    @Transactional
     public String assignUser(Long tableId, Long userId) {
         CafeTable table = tableRepo.findCafeTableById(tableId);
         if (null == table) {
@@ -72,6 +77,7 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    @Transactional
     public void destroyTable(Long tableId) {
         CafeTable table = tableRepo.findCafeTableById(tableId);
         if (null == table) {
@@ -81,6 +87,12 @@ public class TableServiceImpl implements TableService {
         if (null != user) {
             table.getUser().removeTable(table);
         }
+
+        for (Order order : table.getOrders()) {
+            order.setProductsInOrders(new HashSet<>());
+        }
+
+        table.setOrders(new HashSet<>());
         tableRepo.delete(table);
     }
 

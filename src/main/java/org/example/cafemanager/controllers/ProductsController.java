@@ -83,4 +83,21 @@ public class ProductsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
     }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> destroy(@PathVariable("productId") Long productId) {
+        CreateAjaxResponse result = new CreateAjaxResponse();
+
+        try {
+            productService.destroy(productId);
+            result.setMessage("Product has been successfully updated");
+            return ResponseEntity.ok(result);
+        } catch (InstanceNotFoundException e) {
+            result.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } catch (Exception e) {
+            result.setMessage("Something goes wrong! Try again later");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
 }
