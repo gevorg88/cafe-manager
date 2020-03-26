@@ -49,21 +49,21 @@ public class UserController {
             @Valid @RequestBody UserCreateRequestBody requestBody,
             Errors errors
     ) {
-        String password = SecurityUtility.randomPassword();
         ResponseModel result = new ResponseModel();
-        User user = null;
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
 
-        CreateUserRequest createDto = new CreateUserRequest(requestBody.getUsername(),
-                password,
-                requestBody.getEmail());
+        CreateUserRequest createDto = new CreateUserRequest(
+                requestBody.getUsername(),
+                SecurityUtility.randomPassword(),
+                requestBody.getEmail()
+        );
         try {
             createDto.setFirstName(requestBody.getFirstName());
             createDto.setLastName(requestBody.getLastName());
-            user = userService.createUser(createDto, Role.WAITER);
+            userService.createUser(createDto, Role.WAITER);
             result.setMessage("User has been successfully created");
         } catch (MustBeUniqueException e) {
             result.setMessage(e.getMessage());
@@ -73,7 +73,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
 
-//        this.mailConstructor.userInviteEmail(user, password);
         return ResponseEntity.ok(result);
     }
 

@@ -33,8 +33,6 @@ public class UserServiceImpl implements UserService {
 
     private final NotificationService notificationService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
-
     @Autowired
     public UserServiceImpl(UserRepository userRepo, OrderRepository orderRepository, final NotificationService notificationService) {
         this.userRepo = userRepo;
@@ -70,7 +68,13 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(createUserRequest.getUsername());
         user.setEmail(createUserRequest.getEmail());
-        user.setPassword(SecurityUtility.passwordEncoder().encode(createUserRequest.getPassword()));
+
+        user.setPassword(
+                SecurityUtility
+                        .passwordEncoder()
+                        .encode(createUserRequest.getPassword())
+        );
+
         user.setFirstName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());
         user.setRole(role);
@@ -128,7 +132,7 @@ public class UserServiceImpl implements UserService {
             orders.addAll(table.getOrders());
         }
 
-        if (orders.size() > 0){
+        if (orders.size() > 0) {
             for (Order order : orders) {
                 order.setProductsInOrders(new HashSet<>());
             }

@@ -1,6 +1,5 @@
 package org.example.cafemanager.services.product;
 
-import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.domain.Product;
 import org.example.cafemanager.dto.product.ProductCreateRequestBody;

@@ -33,8 +33,8 @@ public class EmailService implements NotificationService {
     public void sendEmail(CreateUserRequest user) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
-        message.setSubject("Registration");
-        message.setText("your password :"  + user.getPassword());
+        message.setSubject("Invitation");
+        message.setText("Hi! Please use on this password to access to your account. Your password is: " + user.getPassword());
         emailSender.send(message);
     }
 }
