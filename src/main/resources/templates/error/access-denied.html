@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{fragments/layout}">
-<head>
-    <title>Access Denied</title>
-</head>
+<html lang="en" xmlns:th="http://www.w3.org/1000/xhtml">
+<head th:replace="common/header :: common-header"/>
+
 <body>
-<div layout:fragment="content" th:remove="tag">
-    <h1>Access denied</h1>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+<div th:replace="common/header :: navbar"></div>
+<div class="container">
+    <div class="row" style="margin-bottom: -100px;">
+        <div class="col-xs-4">
+            <img th:src="@{/image/logo.png}" class="img-responsive" alt=""/>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <h1>Access Denied</h1>
+        <h4>You have not permission to see this page</h4>
+    </div>
 </div>
+<div th:replace="common/header :: body-bottom-scripts" />
 </body>
 </html>

@@ -25,4 +25,9 @@ public class HomeController {
     public String welcome() {
         return "welcome";
     }
+
+    @GetMapping("/error/access-denied")
+    public String accessDenied(){
+        return "error/access-denied";
+    }
 }

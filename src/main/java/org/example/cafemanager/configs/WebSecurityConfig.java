@@ -7,7 +7,6 @@ import org.example.cafemanager.services.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,20 +23,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private LoggingAccessDeniedHandler loggingHandler;
 
-    private Environment env;
-
     @Autowired
     public void setLoggingHandler(LoggingAccessDeniedHandler handler) {
         loggingHandler = handler;
     }
 
-    @Autowired
-    public void setEnv(Environment env) {
-        this.env = env;
-    }
 
     @Bean
-    //TODO discuss beans
     public UserDetailsServiceImpl userDetailsService() {
         return new UserDetailsServiceImpl((UserRepository) getApplicationContext().getBean("userRepo"));
     }

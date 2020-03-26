@@ -10,7 +10,7 @@
     <link href="/css/toastr.min.css" rel="stylesheet"/>
     <link href="/css/non-responsive.css" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet"/>
-    <link rel="icon" th:href=@{image/apple-touch-icon.png}/>
+    <link rel="icon" th:href=@{/image/apple-touch-icon.png}/>
 </head>
 <body>
 <div th:fragment="navbar">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="navbar-header pull-right" th:if="${#authorization.expression('isAuthenticated()')}">
-                <a href="/logout" th:href="@{#}" onclick="$('#form').submit();" class="navbar-brand">
+                <a href="/logout" th:href="@{/logout}" onclick="$('#form').submit();" class="navbar-brand">
                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
                 </a>
                 <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
