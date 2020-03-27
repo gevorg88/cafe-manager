@@ -15,7 +15,6 @@ import java.util.Collection;
 
 @Repository
 public interface CafeTableRepository extends CrudRepository<CafeTable, Long> {
-    CafeTable findByName(@NotNull String name);
 
     Collection<SimpleTableProps> findAllBy();
 

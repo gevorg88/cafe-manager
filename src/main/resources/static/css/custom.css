@@ -19,6 +19,10 @@ footer p {
     width: 50%;
 }
 
-.remove-prod{
+.remove-prod {
     margin-top: 23px;
+}
+
+.col-xs-4 > image.img-responsive {
+    height: 160px;
 }

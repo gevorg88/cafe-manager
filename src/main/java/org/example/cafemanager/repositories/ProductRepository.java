@@ -8,7 +8,6 @@ import java.util.Collection;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    Product findByName(String name);
 
     Collection<SimpleProductProps> findAllBy();
 

@@ -10,13 +10,9 @@ import java.util.Collection;
 
 @Repository(value = "userRepo")
 public interface UserRepository extends CrudRepository<User, Long> {
-    User findUsersByEmail(String email);
+    User findUserByEmail(String email);
 
-    User findByEmail(String email);
-
-    User findUsersByUsername(String username);
-
-    User findByUsername(String username);
+    User findUserByUsername(String username);
 
     Collection<UserPublicProps> findAllByRole(Role role);
 
