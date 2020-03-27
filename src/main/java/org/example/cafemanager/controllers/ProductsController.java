@@ -1,7 +1,7 @@
 package org.example.cafemanager.controllers;
 
 import org.example.cafemanager.dto.product.ProductCreate;
-import org.example.cafemanager.dto.product.ProductCreateRequestBody;
+import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -35,7 +35,7 @@ public class ProductsController {
 
     @PostMapping
     public ResponseEntity<?> store(
-            @Valid @RequestBody ProductCreateRequestBody requestBody,
+            @Valid @RequestBody CreateProductRequest requestBody,
             Errors errors
     ) {
         ResponseModel result = new ResponseModel();
@@ -57,10 +57,10 @@ public class ProductsController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{productId}")
     public ResponseEntity<?> update(
-            @Valid @RequestBody ProductCreateRequestBody requestBody,
-            @PathVariable Long id,
+            @Valid @RequestBody CreateProductRequest requestBody,
+            @PathVariable Long productId,
             Errors errors
     ) {
         ResponseModel result = new ResponseModel();
@@ -69,7 +69,7 @@ public class ProductsController {
             return ResponseEntity.unprocessableEntity().body(result);
         }
         try {
-            productService.update(id, requestBody);
+            productService.update(productId, requestBody);
             result.setMessage("Product has been successfully updated");
             return ResponseEntity.ok(result);
         } catch (MustBeUniqueException e) {

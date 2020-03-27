@@ -2,9 +2,9 @@ package org.example.cafemanager.services.order;
 
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Status;
-import org.example.cafemanager.dto.order.OrderCreate;
+import org.example.cafemanager.dto.order.OrderDetails;
 import org.example.cafemanager.dto.order.ProductInOrderReq;
-import org.example.cafemanager.dto.order.ProductInOrderUpdate;
+import org.example.cafemanager.dto.order.UpdateProductInOrderDto;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.ProductsInOrderRepository;
 import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
@@ -41,8 +41,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order createOrder(OrderCreate orderCreate) {
-        CafeTable table = tableService.getUserAssignedTable(orderCreate.getTableId(), orderCreate.getUser());
+    public Order createOrder(OrderDetails orderDetails) {
+        CafeTable table = tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser());
 
         if (null == table) {
             throw new InstanceNotFoundException("table");
@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderRepository.save(order);
-        for (ProductInOrderReq pio : orderCreate.getProdsInOrder()) {
+        for (ProductInOrderReq pio : orderDetails.getProdsInOrder()) {
             Product product = productService.findOneById(pio.getProductId());
 
             if (null == product) {
@@ -90,14 +90,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void destroyOrder(Long orderId, User user) {
+    public void deleteOrder(Long orderId, User user) {
         Order order = getOrderByIdAndUser(orderId, user);
         order.setProductsInOrders(new HashSet<>());
         orderRepository.delete(order);
     }
 
     @Override
-    public ProductsInOrder updateProductInOrder(ProductInOrderUpdate productUpdate) {
+    public ProductsInOrder updateProductInOrder(UpdateProductInOrderDto productUpdate) {
         Order order = getOrderByIdAndUser(productUpdate.getOrderId(), productUpdate.getUser());
         ProductsInOrder pio = ordersProductInOrder(order, productUpdate.getPioId());
         pio.setAmount(productUpdate.getAmount());

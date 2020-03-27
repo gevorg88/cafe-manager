@@ -34,7 +34,6 @@
                     </td>
                     <td class="text-center" th:with="isOpen=${table.orderCount == 0}">
                         <a class="btn btn-primary btn-xs create-order"
-                           th:classappend="${isOpen ? '' : 'hidden'}"
                            th:href="${isOpen ? ('/orders/manage/' + table.id) : ''}">
                             <i class="glyphicon glyphicon-cutlery"></i>
                         </a>

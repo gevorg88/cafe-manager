@@ -2,13 +2,13 @@ package org.example.cafemanager.dto.order;
 
 import org.example.cafemanager.domain.User;
 
-public class ProductInOrderUpdate {
+public class UpdateProductInOrderDto {
     private Long pioId;
     private Long orderId;
     private User user;
     private Integer amount;
 
-    public ProductInOrderUpdate(Long pioId, Long orderId, User user, Integer amount) {
+    public UpdateProductInOrderDto(Long pioId, Long orderId, User user, Integer amount) {
         this.pioId = pioId;
         this.orderId = orderId;
         this.user = user;

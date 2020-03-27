@@ -19,7 +19,7 @@ public interface TableService {
 
     Collection<OnlyTableProps> getUserAssignedTables(Long id);
 
-    Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithCount(Long id);
+    Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithOpenStatus(Long userId);
 
     CafeTable getUserAssignedTable(Long tableID, User user);
 }

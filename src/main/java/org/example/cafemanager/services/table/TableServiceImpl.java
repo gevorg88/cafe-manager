@@ -3,6 +3,7 @@ package org.example.cafemanager.services.table;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.User;
+import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.CafeTableRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class TableServiceImpl implements TableService {
@@ -122,8 +122,8 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithCount(Long id) {
-        return this.tableRepo.userTablesWithOrders(id);
+    public Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithOpenStatus(Long userId) {
+        return tableRepo.userTablesWithOrdersForStatus(userId, Status.OPEN);
     }
 
     @Override

@@ -49,9 +49,6 @@ public class OrderController {
         try {
             CafeTable table = tableService.getUserAssignedTable(tableId, user);
             Set<Order> orders = table.getOrders();
-            for (Order order : orders) {
-                System.out.println(order.getStatus());
-            }
             model.addAttribute("table", tableService.getUserAssignedTable(tableId, user));
             model.addAttribute("orders", orders);
             model.addAttribute("statuses", Status.getEnumMapValues());
@@ -66,7 +63,7 @@ public class OrderController {
     public ResponseEntity<?> store(
             @AuthenticationPrincipal User user,
             @PathVariable("tableId") Long tableId,
-            @RequestBody OrderCreateRequest requestBody,
+            @RequestBody CreateOrderRequest requestBody,
             Errors errors
     ) {
         ResponseModel result = new ResponseModel();
@@ -76,7 +73,7 @@ public class OrderController {
             return ResponseEntity.unprocessableEntity().body(result);
         }
         try {
-            orderService.createOrder(new OrderCreate(tableId, requestBody.getProducts(), user));
+            orderService.createOrder(new OrderDetails(tableId, requestBody.getProducts(), user));
             result.setMessage("Order has been successfully created");
         } catch (InstanceNotFoundException e) {
             result.setMessage(e.getMessage());
@@ -98,7 +95,7 @@ public class OrderController {
     ) {
         ResponseModel result = new ResponseModel();
         try {
-            orderService.destroyOrder(orderId, user);
+            orderService.deleteOrder(orderId, user);
             result.setMessage("Order has been successfully deleted");
         } catch (InstanceNotFoundException e) {
             result.setMessage(e.getMessage());
@@ -138,7 +135,7 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/pio/{pioId}")
-    public ResponseEntity<?> updatePio(
+    public ResponseEntity<?> updateProductInOrder(
             @PathVariable("orderId") Long orderId,
             @PathVariable("pioId") Long pioId,
             @AuthenticationPrincipal User user,
@@ -153,7 +150,7 @@ public class OrderController {
         }
         try {
             orderService.updateProductInOrder(
-                    new ProductInOrderUpdate(
+                    new UpdateProductInOrderDto(
                             pioId,
                             orderId,
                             user,

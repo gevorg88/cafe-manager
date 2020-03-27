@@ -2,11 +2,11 @@ package org.example.cafemanager.services.user;
 
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
-import org.example.cafemanager.dto.user.UserPublicProps;
+import org.example.cafemanager.dto.user.UserPublicProfile;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
-import org.example.cafemanager.dto.user.UserUpdateRequestBody;
+import org.example.cafemanager.dto.user.UpdateUserRequest;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.UserRepository;
 import org.example.cafemanager.services.communication.NotificationService;
@@ -15,7 +15,9 @@ import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -48,8 +50,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepo.findUserByUsername(username);
+    @Cacheable(value = "findUserByEmailAndEmail")
+    public User findByUsernameOrEmail(String username, String email) {
+        return userRepo.findUserByUsernameOrEmail(username,email);
     }
 
     @Override
@@ -59,12 +62,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(CreateUserRequest createUserRequest, Role role) {
-        if (findByUsername(createUserRequest.getUsername()) != null) {
+        Assert.notNull(createUserRequest.getEmail(), "Email not provided");
+        if (findByUsernameOrEmail(createUserRequest.getUsername(), createUserRequest.getEmail()) != null) {
             throw new MustBeUniqueException("username");
-        }
-
-        if (findByEmail(createUserRequest.getEmail()) != null) {
-            throw new MustBeUniqueException("email");
         }
 
         User user = new User();
@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<UserPublicProps> getAllWaiters() {
-        return this.userRepo.findAllByRole(Role.WAITER);
+    public Collection<UserPublicProfile> getAllWaiters() {
+        return userRepo.findAllByRole(Role.WAITER);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Long id, UserUpdateRequestBody requestBody) {
+    public User update(Long id, UpdateUserRequest requestBody) {
         User user = userRepo.findUserById(id);
         if (null == user) {
             throw new InstanceNotFoundException("user");

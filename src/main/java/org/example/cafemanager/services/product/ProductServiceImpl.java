@@ -2,12 +2,13 @@ package org.example.cafemanager.services.product;
 
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.domain.Product;
-import org.example.cafemanager.dto.product.ProductCreateRequestBody;
+import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.product.SimpleProductProps;
 import org.example.cafemanager.repositories.ProductRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.product.contracts.ProductService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Long id, ProductCreateRequestBody requestBody) {
+    public Product update(Long id, CreateProductRequest requestBody) {
         Product product = productRepository.findProductById(id);
         if (null == product) {
             throw new InstanceNotFoundException("product");
@@ -75,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void destroy(Long productId) {
-        Product product = this.findOneById(productId);
+        Product product = findOneById(productId);
 
         if (null == product) {
             throw new InstanceNotFoundException("product");

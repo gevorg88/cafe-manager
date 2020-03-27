@@ -2,7 +2,7 @@ package org.example.cafemanager.repositories;
 
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
-import org.example.cafemanager.dto.user.UserPublicProps;
+import org.example.cafemanager.dto.user.UserPublicProfile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +12,9 @@ import java.util.Collection;
 public interface UserRepository extends CrudRepository<User, Long> {
     User findUserByEmail(String email);
 
-    User findUserByUsername(String username);
+    User findUserByUsernameOrEmail(String username, String email);
 
-    Collection<UserPublicProps> findAllByRole(Role role);
+    Collection<UserPublicProfile> findAllByRole(Role role);
 
     User findUserById(Long id);
 }

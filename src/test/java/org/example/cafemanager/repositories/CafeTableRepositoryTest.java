@@ -4,6 +4,7 @@ import org.example.Util;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
+import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
 import org.junit.Assert;
@@ -34,6 +35,7 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
 
         entityManager.persist(table);
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test(expected = ConstraintViolationException.class)
@@ -42,6 +44,7 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         table.setName(Util.randomString(35));
         entityManager.persist(table);
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -53,6 +56,7 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         entityManager.persist(table1);
         entityManager.persist(table2);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertEquals(cafeTableRepository.findAllBy().size(), 2);
     }
@@ -64,6 +68,7 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         table.setName(name);
         entityManager.persist(table);
         entityManager.flush();
+        entityManager.clear();
 
         OnlyTableProps found = cafeTableRepository.findOneByName(name);
         Assert.assertEquals(found.getName(), name);
@@ -75,10 +80,11 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         table.setName(Util.randomString(6));
         entityManager.persist(table);
         entityManager.flush();
+        entityManager.clear();
 
         CafeTable table1 = cafeTableRepository.findCafeTableById(table.getId());
         Assert.assertEquals(
-                table1, table
+                table, table1
         );
     }
 
@@ -89,15 +95,16 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         table.setName(name);
         entityManager.persist(table);
         entityManager.flush();
+        entityManager.clear();
 
         CafeTable table1 = cafeTableRepository.findCafeTableByNameAndIdIsNot(name, table.getId() + 1);
         Assert.assertEquals(
-                table1, table
+                table, table1
         );
     }
 
     @Test
-    public void getAllByUserIdIs() {
+    public void getAllByUserIds() {
         CafeTable table = new CafeTable();
         String name = Util.randomString(6);
         table.setName(name);
@@ -120,7 +127,7 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     }
 
     @Test
-    public void userTablesWithOrders() {
+    public void userTablesWithoutOrders() {
         CafeTable table = new CafeTable();
         String name = Util.randomString(6);
         table.setName(name);
@@ -138,9 +145,10 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         entityManager.persist(table);
         entityManager.persist(user);
         entityManager.flush();
+        entityManager.clear();
 
         Optional<TableWithOpenOrdersCount> t = cafeTableRepository
-                .userTablesWithOrders(user.getId())
+                .userTablesWithOrdersForStatus(user.getId(), Status.OPEN)
                 .stream().findFirst();
               Assert.assertTrue(t.isPresent());
         int count = t.get().getOrderCount();

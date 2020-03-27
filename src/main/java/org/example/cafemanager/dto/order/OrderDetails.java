@@ -4,12 +4,12 @@ import org.example.cafemanager.domain.User;
 
 import java.util.List;
 
-public class OrderCreate {
+public class OrderDetails {
     private Long tableId;
     private List<ProductInOrderReq> prodsInOrder;
     private User user;
 
-    public OrderCreate(
+    public OrderDetails(
             Long tableId,
             List<ProductInOrderReq> prodsInOrder,
             User user

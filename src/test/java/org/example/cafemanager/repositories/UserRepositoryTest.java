@@ -122,7 +122,7 @@ public class UserRepositoryTest extends AbstractTransactionalJUnit4SpringContext
         entityManager.persist(u);
         entityManager.flush();
 
-        User found = userRepository.findUserByUsername(username);
+        User found = userRepository.findUserByUsernameOrEmail(username, "email");
         Assert.assertEquals(found.getUsername(), username);
     }
 

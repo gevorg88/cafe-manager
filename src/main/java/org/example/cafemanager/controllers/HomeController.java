@@ -1,13 +1,14 @@
 package org.example.cafemanager.controllers;
 
-import org.example.cafemanager.services.user.contracts.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Objects;
+
 @Controller
 public class HomeController {
+
     @GetMapping("/")
     public String index() {
         return "redirect:login";
@@ -15,7 +16,7 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login(Authentication authentication) {
-        if (null != authentication && authentication.isAuthenticated()) {
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
             return "redirect:welcome";
         }
         return "login";

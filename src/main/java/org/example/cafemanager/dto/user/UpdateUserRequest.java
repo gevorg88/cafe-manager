@@ -3,7 +3,7 @@ package org.example.cafemanager.dto.user;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 
-public class UserUpdateRequestBody {
+public class UpdateUserRequest {
     @NotBlank(message = "First Name is required")
     @Length(max = 32, min = 6, message = "First name must contain at from 6 to 32 symbols")
     private String firstName;

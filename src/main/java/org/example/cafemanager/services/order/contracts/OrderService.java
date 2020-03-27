@@ -4,17 +4,17 @@ import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.ProductsInOrder;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
-import org.example.cafemanager.dto.order.OrderCreate;
-import org.example.cafemanager.dto.order.ProductInOrderUpdate;
+import org.example.cafemanager.dto.order.OrderDetails;
+import org.example.cafemanager.dto.order.UpdateProductInOrderDto;
 
 public interface OrderService {
-    Order createOrder(OrderCreate orderCreate);
+    Order createOrder(OrderDetails orderDetails);
 
     void destroyProductInOrder(Long orderId, Long pioId, User user);
 
-    ProductsInOrder updateProductInOrder(ProductInOrderUpdate productUpdate);
+    ProductsInOrder updateProductInOrder(UpdateProductInOrderDto productUpdate);
 
     Order updateStatus(Long orderId, Status status, User user);
 
-    void destroyOrder(Long orderId, User user);
+    void deleteOrder(Long orderId, User user);
 }

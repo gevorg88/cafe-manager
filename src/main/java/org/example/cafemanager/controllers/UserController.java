@@ -1,16 +1,14 @@
 package org.example.cafemanager.controllers;
 
-import org.example.cafemanager.domain.User;
+import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.user.CreateUserRequest;
-import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.dto.user.UserCreateRequestBody;
-import org.example.cafemanager.dto.user.UserPublicProps;
-import org.example.cafemanager.dto.user.UserUpdateRequestBody;
+import org.example.cafemanager.dto.user.UserPublicProfile;
+import org.example.cafemanager.dto.user.UpdateUserRequest;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
-import org.example.cafemanager.utilities.MailConstructor;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +27,14 @@ import java.util.Collection;
 public class UserController {
     private final UserService userService;
 
-    private final MailConstructor mailConstructor;
-
     @Autowired
-    public UserController(final UserService userService, final MailConstructor mailConstructor) {
+    public UserController(final UserService userService) {
         this.userService = userService;
-        this.mailConstructor = mailConstructor;
     }
 
     @GetMapping
     public String index(Model model) {
-        Collection<UserPublicProps> users = userService.getAllWaiters();
+        Collection<UserPublicProfile> users = userService.getAllWaiters();
         model.addAttribute("users", users);
         return "user/list";
     }
@@ -79,7 +74,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
-            @Valid @RequestBody UserUpdateRequestBody requestBody,
+            @Valid @RequestBody UpdateUserRequest requestBody,
             Errors errors
     ) {
         ResponseModel result = new ResponseModel();

@@ -1,6 +1,6 @@
 package org.example.cafemanager.dto.user;
 
-public interface UserPublicProps {
+public interface UserPublicProfile {
     Long getId();
 
     String getFirstName();
