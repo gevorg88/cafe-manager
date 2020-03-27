@@ -14,8 +14,6 @@ import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.user.contracts.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +32,11 @@ public class UserServiceImpl implements UserService {
     private final NotificationService notificationService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepo, OrderRepository orderRepository, final NotificationService notificationService) {
+    public UserServiceImpl(
+            UserRepository userRepo,
+            OrderRepository orderRepository,
+            NotificationService notificationService
+    ) {
         this.userRepo = userRepo;
         this.orderRepository = orderRepository;
         this.notificationService = notificationService;
