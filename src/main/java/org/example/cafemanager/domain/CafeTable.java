@@ -2,14 +2,15 @@ package org.example.cafemanager.domain;
 
 import org.example.cafemanager.domain.enums.Status;
 import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "cafe_tables")
+@Table(name = "cafe_tables",indexes = {
+        @Index(name = "idx_cafe_table_name", columnList = "name"),
+})
 public class CafeTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

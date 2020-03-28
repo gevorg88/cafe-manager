@@ -1,11 +1,12 @@
 package org.example.cafemanager.services.user;
 
-import org.example.Util;
+import org.example.utils.Util;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.UserRepository;
 import org.example.cafemanager.services.communication.NotificationService;
+import org.example.cafemanager.services.user.impls.UserServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

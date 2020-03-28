@@ -1,21 +1,15 @@
 package org.example.cafemanager.repositories;
 
-import org.example.Util;
+import org.example.utils.Util;
 import org.example.cafemanager.domain.*;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.PersistenceException;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class ProductsInOrderRepositoryRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class ProductsInOrderRepositoryRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
     private ProductsInOrderRepository productsInOrderRepository;
@@ -25,57 +19,38 @@ public class ProductsInOrderRepositoryRepositoryTest extends AbstractTransaction
 
     @Test(expected = PersistenceException.class)
     public void persistProductsInOrderWithoutProduct() {
-        CafeTable table = new CafeTable();
-        table.setName(Util.randomString(5));
-
-        Order order = new Order();
-        order.setCafeTable(table);
-
-        ProductsInOrder pio = new ProductsInOrder();
-        pio.setAmount(2);
-        pio.setOrder(order);
-
-        entityManager.persist(table);
-        entityManager.persist(order);
+        ProductsInOrder pio = createProductInOrder();
+        pio.setProduct(null);
+        entityManager.persist(pio.getOrder().getCafeTable());
+        entityManager.persist(pio.getOrder());
         entityManager.persist(pio);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test(expected = PersistenceException.class)
     public void persistProductsInOrderWithoutOrder() {
-        Product product = new Product();
-        product.setName(Util.randomString(5));
+        ProductsInOrder pio = createProductInOrder();
+        pio.setOrder(null);
 
-        ProductsInOrder pio = new ProductsInOrder();
-        pio.setAmount(2);
-        pio.setProduct(product);
-
-        entityManager.persist(product);
+        entityManager.persist(pio.getProduct());
         entityManager.persist(pio);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test
     public void productsInOrderIsCreated() {
-        CafeTable table = new CafeTable();
-        table.setName(Util.randomString(5));
+        ProductsInOrder pio = createProductInOrder();
 
-        Order order = new Order();
-        order.setCafeTable(table);
-
-        Product product = new Product();
-        product.setName(Util.randomString(5));
-
-        ProductsInOrder pio = new ProductsInOrder();
-        pio.setOrder(order);
-        pio.setAmount(2);
-        pio.setProduct(product);
-
-        entityManager.persist(table);
-        entityManager.persist(order);
-        entityManager.persist(product);
+        entityManager.persist(pio.getOrder().getCafeTable());
+        entityManager.persist(pio.getOrder());
+        entityManager.persist(pio.getProduct());
         entityManager.persist(pio);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertNotNull(productsInOrderRepository.findById(pio.getId()));
     }

@@ -1,22 +1,16 @@
 package org.example.cafemanager.repositories;
 
-import org.example.Util;
+import org.example.utils.Util;
 import org.example.cafemanager.domain.Product;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class ProductRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class ProductRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
@@ -29,29 +23,29 @@ public class ProductRepositoryTest extends AbstractTransactionalJUnit4SpringCont
         Product product = new Product();
         entityManager.persist(product);
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test(expected = PersistenceException.class)
     public void persistOrderWithDupName() {
         String name = Util.randomString(6);
-        Product product1 = new Product();
-        product1.setName(name);
 
-        Product product2 = new Product();
-        product2.setName(name);
+        Product product1 = createProduct(name);
+        Product product2 = createProduct(name);
 
         entityManager.persist(product1);
         entityManager.persist(product2);
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
     public void findAllBy() {
-        Product product = new Product();
-        product.setName(Util.randomString(6));
+        Product product = createProduct();
 
         entityManager.persist(product);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertEquals(productRepository.findAllBy().size(), 1);
     }
@@ -59,22 +53,22 @@ public class ProductRepositoryTest extends AbstractTransactionalJUnit4SpringCont
     @Test
     public void findProductByName() {
         String name = Util.randomString(6);
-        Product product = new Product();
-        product.setName(name);
+        Product product = createProduct(name);
 
         entityManager.persist(product);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertNotNull(productRepository.findProductByName(name));
     }
 
     @Test
     public void findProductById() {
-        Product product = new Product();
-        product.setName(Util.randomString(6));
+        Product product = createProduct();
 
         entityManager.persist(product);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertNotNull(productRepository.findProductById(product.getId()));
     }
@@ -82,11 +76,11 @@ public class ProductRepositoryTest extends AbstractTransactionalJUnit4SpringCont
     @Test
     public void findProductByNameAndIdIsNot() {
         String name = Util.randomString(6);
-        Product product = new Product();
-        product.setName(name);
+        Product product = createProduct(name);
 
         entityManager.persist(product);
         entityManager.flush();
+        entityManager.clear();
 
         Assert.assertNotNull(productRepository.findProductByNameAndIdIsNot(name, product.getId() + 1));
     }

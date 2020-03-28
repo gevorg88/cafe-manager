@@ -32,9 +32,9 @@
                     <td th:with="isOpen=${table.orderCount == 0}">
                         <span th:text="${isOpen ? 'YES': 'NO'}"></span>
                     </td>
-                    <td class="text-center" th:with="isOpen=${table.orderCount == 0}">
+                    <td class="text-center">
                         <a class="btn btn-primary btn-xs create-order"
-                           th:href="${isOpen ? ('/orders/manage/' + table.id) : ''}">
+                           th:href="${'/orders/manage/' + table.id}">
                             <i class="glyphicon glyphicon-cutlery"></i>
                         </a>
                     </td>

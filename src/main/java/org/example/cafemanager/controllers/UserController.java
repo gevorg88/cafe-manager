@@ -5,10 +5,10 @@ import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UserCreateRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
-import org.example.cafemanager.dto.user.UpdateUserRequest;
+import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.user.contracts.UserService;
+import org.example.cafemanager.services.user.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<?> store(
             @Valid @RequestBody UserCreateRequestBody requestBody,
             Errors errors
-    ) {
+    ) throws Exception {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -58,7 +58,7 @@ public class UserController {
         try {
             createDto.setFirstName(requestBody.getFirstName());
             createDto.setLastName(requestBody.getLastName());
-            userService.createUser(createDto, Role.WAITER);
+            userService.create(createDto, Role.WAITER);
             result.setMessage("User has been successfully created");
         } catch (MustBeUniqueException e) {
             result.setMessage(e.getMessage());
@@ -74,7 +74,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateUserRequest requestBody,
+            @Valid @RequestBody UpdateUserRequestBody requestBody,
             Errors errors
     ) {
         ResponseModel result = new ResponseModel();
@@ -99,7 +99,7 @@ public class UserController {
     public ResponseEntity<?> destroy(@PathVariable("userId") Long userId) {
         ResponseModel result = new ResponseModel();
         try {
-            userService.destroyUser(userId);
+            userService.delete(userId);
             result.setMessage("User has been successfully deleted");
             return ResponseEntity.ok(result);
         } catch (InstanceNotFoundException e) {

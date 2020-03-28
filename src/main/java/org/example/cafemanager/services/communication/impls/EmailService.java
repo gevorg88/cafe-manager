@@ -1,6 +1,7 @@
-package org.example.cafemanager.services.communication;
+package org.example.cafemanager.services.communication.impls;
 
 import org.example.cafemanager.dto.user.CreateUserRequest;
+import org.example.cafemanager.services.communication.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jms.annotation.JmsListener;

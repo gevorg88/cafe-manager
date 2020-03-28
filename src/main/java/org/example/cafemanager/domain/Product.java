@@ -10,7 +10,9 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+        @Index(name = "idx_product_name", columnList = "name"),
+})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

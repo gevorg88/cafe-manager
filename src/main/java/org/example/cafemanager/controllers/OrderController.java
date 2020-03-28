@@ -8,9 +8,9 @@ import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.order.*;
 import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
-import org.example.cafemanager.services.order.contracts.OrderService;
-import org.example.cafemanager.services.product.contracts.ProductService;
-import org.example.cafemanager.services.table.contracts.TableService;
+import org.example.cafemanager.services.order.OrderService;
+import org.example.cafemanager.services.product.ProductService;
+import org.example.cafemanager.services.table.TableService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +89,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<?> destroy(
+    public ResponseEntity<?> delete(
             @PathVariable("orderId") Long orderId,
             @AuthenticationPrincipal User user
     ) {
@@ -101,7 +101,6 @@ public class OrderController {
             result.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         } catch (Exception e) {
-            e.getMessage();
             result.setMessage("Something goes wrong! Try again later");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
@@ -109,7 +108,7 @@ public class OrderController {
     }
 
     @PutMapping("/change-status/{orderId}")
-    public ResponseEntity<?> changeStatus(
+    public ResponseEntity<?> changeOrderStatus(
             @PathVariable("orderId") Long orderId,
             @AuthenticationPrincipal User user,
             @RequestBody OrderStatusUpdate orderStatus,
@@ -122,7 +121,7 @@ public class OrderController {
             return ResponseEntity.unprocessableEntity().body(result);
         }
         try {
-            orderService.updateStatus(orderId, orderStatus.getStatus(), user);
+            orderService.updateOrderStatus(orderId, orderStatus.getStatus(), user);
             result.setMessage("Order status has been successfully updated");
         } catch (InstanceNotFoundException e) {
             result.setMessage(e.getMessage());
@@ -137,7 +136,7 @@ public class OrderController {
     @PutMapping("/{orderId}/pio/{pioId}")
     public ResponseEntity<?> updateProductInOrder(
             @PathVariable("orderId") Long orderId,
-            @PathVariable("pioId") Long pioId,
+            @PathVariable("pioId") Long productInOrderId,
             @AuthenticationPrincipal User user,
             @RequestBody PioUpdateReq requestBody,
             Errors errors
@@ -151,7 +150,7 @@ public class OrderController {
         try {
             orderService.updateProductInOrder(
                     new UpdateProductInOrderDto(
-                            pioId,
+                            productInOrderId,
                             orderId,
                             user,
                             requestBody.getAmount()
@@ -169,14 +168,14 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}/pio/{pioId}")
-    public ResponseEntity<?> destroyPio(
+    public ResponseEntity<?> deleteProductInOrder(
             @PathVariable("orderId") Long orderId,
-            @PathVariable("pioId") Long pioId,
+            @PathVariable("pioId") Long productInOrderId,
             @AuthenticationPrincipal User user
     ) {
         ResponseModel result = new ResponseModel();
         try {
-            orderService.destroyProductInOrder(orderId, pioId, user);
+            orderService.deleteProductInOrder(orderId, productInOrderId, user);
             result.setMessage("Product In Order has been successfully deleted");
         } catch (InstanceNotFoundException e) {
             result.setMessage(e.getMessage());

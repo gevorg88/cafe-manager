@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.table;
+package org.example.cafemanager.services.table.impls;
 
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
@@ -8,12 +8,14 @@ import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.CafeTableRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.table.contracts.TableService;
-import org.example.cafemanager.services.user.contracts.UserService;
+import org.example.cafemanager.services.table.TableService;
+import org.example.cafemanager.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -39,7 +41,10 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public CafeTable createTable(TableCreate createDto) {
+    public CafeTable create(@NotNull TableCreate createDto) {
+        Assert.notNull(createDto, "TableCreate can not be null");
+        Assert.notNull(createDto.getName(), "Table Name is not provided");
+
         OnlyTableProps existingTable = tableRepo.findOneByName(createDto.getName());
         if (null != existingTable) {
             throw new MustBeUniqueException("name");
@@ -78,7 +83,7 @@ public class TableServiceImpl implements TableService {
 
     @Override
     @Transactional
-    public void destroyTable(Long tableId) {
+    public void delete(Long tableId) {
         CafeTable table = tableRepo.findCafeTableById(tableId);
         if (null == table) {
             throw new InstanceNotFoundException("table");
@@ -98,6 +103,9 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public CafeTable update(Long id, TableCreateRequestBody requestBody) {
+        Assert.notNull(requestBody, "TableCreateRequestBody can not be null");
+        Assert.notNull(requestBody.getName(), "Table Name is not provided");
+
         CafeTable table = tableRepo.findCafeTableById(id);
         if (null == table) {
             throw new InstanceNotFoundException("table");
@@ -117,18 +125,13 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public Collection<OnlyTableProps> getUserAssignedTables(Long id) {
-        return tableRepo.getAllByUserIdIs(id);
-    }
-
-    @Override
     public Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithOpenStatus(Long userId) {
         return tableRepo.userTablesWithOrdersForStatus(userId, Status.OPEN);
     }
 
     @Override
-    public CafeTable getUserAssignedTable(Long tableID, User user) {
-        CafeTable table = tableRepo.findCafeTableByIdAndUser(tableID, user);
+    public CafeTable getUserAssignedTable(Long tableId, User user) {
+        CafeTable table = tableRepo.findCafeTableByIdAndUser(tableId, user);
         if (null == table) {
             throw new InstanceNotFoundException("table");
         }

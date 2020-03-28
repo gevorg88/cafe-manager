@@ -5,9 +5,9 @@ import org.example.cafemanager.dto.table.TableCreate;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
-import org.example.cafemanager.services.table.contracts.TableService;
+import org.example.cafemanager.services.table.TableService;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.user.contracts.UserService;
+import org.example.cafemanager.services.user.UserService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,7 +55,7 @@ public class TableController {
         }
         TableCreate createDto = new TableCreate(requestBody.getName());
         try {
-            tableService.createTable(createDto);
+            tableService.create(createDto);
             result.setMessage("Table has been successfully created");
         } catch (MustBeUniqueException e) {
             result.setMessage(e.getMessage());
@@ -90,7 +90,7 @@ public class TableController {
         ResponseModel result = new ResponseModel();
 
         try {
-            tableService.destroyTable(tableId);
+            tableService.delete(tableId);
             result.setMessage("Table has been successfully deleted!");
             return ResponseEntity.ok(result);
         } catch (InstanceNotFoundException e) {

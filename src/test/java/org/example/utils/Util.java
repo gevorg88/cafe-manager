@@ -1,10 +1,10 @@
-package org.example;
+package org.example.utils;
 
 import java.util.Random;
 
 public class Util {
     public static String randomString(int length){
-        String  alphabet= "ABCEFGHIJKLMNOPQRSTUVWXYZ";
+        String  alphabet= "ABCEFGHIJKLMNOPQRSTUVWXYZ1234567890_";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
 

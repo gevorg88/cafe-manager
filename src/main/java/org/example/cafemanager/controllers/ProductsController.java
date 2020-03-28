@@ -5,7 +5,7 @@ import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.product.contracts.ProductService;
+import org.example.cafemanager.services.product.ProductService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class ProductsController {
         }
         ProductCreate createDto = new ProductCreate(requestBody.getName());
         try {
-            productService.createProduct(createDto);
+            productService.create(createDto);
             result.setMessage("Product has been successfully created");
         } catch (MustBeUniqueException e) {
             result.setMessage(e.getMessage());
@@ -85,11 +85,11 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> destroy(@PathVariable("productId") Long productId) {
+    public ResponseEntity<?> delete(@PathVariable("productId") Long productId) {
         ResponseModel result = new ResponseModel();
 
         try {
-            productService.destroy(productId);
+            productService.delete(productId);
             result.setMessage("Product has been successfully updated");
             return ResponseEntity.ok(result);
         } catch (InstanceNotFoundException e) {

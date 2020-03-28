@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.user;
+package org.example.cafemanager.services.user.impls;
 
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.repositories.UserRepository;
@@ -20,7 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepo.findUserByUsernameOrEmail(username, "email");
-        if (user == null) throw new UsernameNotFoundException(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
         return user;
     }
 }

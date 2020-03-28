@@ -1,27 +1,20 @@
 package org.example.cafemanager.repositories;
 
-import org.example.Util;
+import org.example.utils.Util;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
-import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
     private CafeTableRepository cafeTableRepository;
@@ -32,120 +25,98 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
     @Test(expected = ConstraintViolationException.class)
     public void persistTableWithoutName() {
         CafeTable table = new CafeTable();
-
         entityManager.persist(table);
         entityManager.flush();
+
         entityManager.clear();
     }
 
     @Test(expected = ConstraintViolationException.class)
     public void persistTableWithVeryLongName() {
-        CafeTable table = new CafeTable();
-        table.setName(Util.randomString(35));
+        CafeTable table = createCafeTable(Util.randomString(256));
         entityManager.persist(table);
         entityManager.flush();
+
         entityManager.clear();
     }
 
     @Test
     public void findAllBy() {
-        CafeTable table1 = new CafeTable();
-        table1.setName(Util.randomString(5));
-        CafeTable table2 = new CafeTable();
-        table2.setName(Util.randomString(5));
+        CafeTable table1 = createCafeTable();
+        CafeTable table2 = createCafeTable();
         entityManager.persist(table1);
         entityManager.persist(table2);
         entityManager.flush();
-        entityManager.clear();
 
         Assert.assertEquals(cafeTableRepository.findAllBy().size(), 2);
+
+        entityManager.clear();
     }
 
     @Test
     public void findOneByName() {
-        CafeTable table = new CafeTable();
         String name = Util.randomString(5);
-        table.setName(name);
+        CafeTable table = createCafeTable(name);
         entityManager.persist(table);
         entityManager.flush();
-        entityManager.clear();
 
         OnlyTableProps found = cafeTableRepository.findOneByName(name);
         Assert.assertEquals(found.getName(), name);
+
+        entityManager.clear();
     }
 
     @Test
     public void findCafeTableById() {
-        CafeTable table = new CafeTable();
-        table.setName(Util.randomString(6));
+        CafeTable table = createCafeTable();
         entityManager.persist(table);
         entityManager.flush();
-        entityManager.clear();
 
         CafeTable table1 = cafeTableRepository.findCafeTableById(table.getId());
         Assert.assertEquals(
                 table, table1
         );
+
+        entityManager.clear();
     }
 
     @Test
     public void findCafeTableByNameAndIdIsNot() {
-        CafeTable table = new CafeTable();
         String name = Util.randomString(6);
-        table.setName(name);
+        CafeTable table = createCafeTable(name);
         entityManager.persist(table);
         entityManager.flush();
-        entityManager.clear();
 
         CafeTable table1 = cafeTableRepository.findCafeTableByNameAndIdIsNot(name, table.getId() + 1);
         Assert.assertEquals(
                 table, table1
         );
+
+        entityManager.clear();
     }
 
     @Test
     public void getAllByUserIds() {
-        CafeTable table = new CafeTable();
-        String name = Util.randomString(6);
-        table.setName(name);
+        User user = createUser();
+        CafeTable table = createCafeTable(user);
 
-        User user = new User();
-        user.setEmail("test@email.email");
-        user.setUsername(Util.randomString(6));
-        user.setPassword(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setRole(Role.WAITER);
-
-        table.setUser(user);
-
-        entityManager.persist(table);
         entityManager.persist(user);
+        entityManager.persist(table);
         entityManager.flush();
 
         Assert.assertEquals(cafeTableRepository.getAllByUserIdIs(user.getId()).size(), 1);
+
+        entityManager.clear();
     }
 
     @Test
     public void userTablesWithoutOrders() {
-        CafeTable table = new CafeTable();
-        String name = Util.randomString(6);
-        table.setName(name);
-
-        User user = new User();
-        user.setEmail("test@email.email");
-        user.setUsername(Util.randomString(6));
-        user.setPassword(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setRole(Role.WAITER);
-
-        table.setUser(user);
+        User user = createUser();
+        CafeTable table = createCafeTable(user);
 
         entityManager.persist(table);
         entityManager.persist(user);
         entityManager.flush();
-        entityManager.clear();
 
         Optional<TableWithOpenOrdersCount> t = cafeTableRepository
                 .userTablesWithOrdersForStatus(user.getId(), Status.OPEN)
@@ -154,28 +125,21 @@ public class CafeTableRepositoryTest extends AbstractTransactionalJUnit4SpringCo
         int count = t.get().getOrderCount();
 
         Assert.assertEquals(count, 0);
+
+        entityManager.clear();
     }
 
     @Test
     public void findCafeTableByIdAndUser() {
-        CafeTable table = new CafeTable();
-        String name = Util.randomString(6);
-        table.setName(name);
-
-        User user = new User();
-        user.setEmail("test@email.email");
-        user.setUsername(Util.randomString(6));
-        user.setPassword(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setFirstName(Util.randomString(6));
-        user.setRole(Role.WAITER);
-
-        table.setUser(user);
+        User user = createUser();
+        CafeTable table = createCafeTable(user);
 
         entityManager.persist(table);
         entityManager.persist(user);
         entityManager.flush();
 
         Assert.assertEquals(table, cafeTableRepository.findCafeTableByIdAndUser(table.getId(), user));
+
+        entityManager.clear();
     }
 }

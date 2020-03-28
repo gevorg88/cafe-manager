@@ -4,8 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Objects;
-
 @Controller
 public class HomeController {
 
@@ -16,7 +14,7 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login(Authentication authentication) {
-        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+        if (null !=authentication && authentication.isAuthenticated()) {
             return "redirect:welcome";
         }
         return "login";

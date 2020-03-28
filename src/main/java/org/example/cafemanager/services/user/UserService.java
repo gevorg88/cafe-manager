@@ -1,10 +1,10 @@
-package org.example.cafemanager.services.user.contracts;
+package org.example.cafemanager.services.user;
 
 import org.example.cafemanager.dto.user.UserPublicProfile;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
-import org.example.cafemanager.dto.user.UpdateUserRequest;
+import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 
 import java.util.Collection;
 
@@ -14,17 +14,17 @@ public interface UserService {
 
     User findByUsernameOrEmail(String username, String email);
 
-    Iterable<User> findAll();
+    Iterable<User> findAllUsers();
 
-    User createUser(CreateUserRequest createUserRequest, Role role) throws Exception;
+    User create(CreateUserRequest createUserRequest, Role role) throws Exception;
 
     Collection<UserPublicProfile> getAllWaiters();
 
     User save(User user);
 
-    User getUserById(Long id);
+    User getUserById(Long userId);
 
-    User update(Long id, UpdateUserRequest requestBody);
+    User update(Long userId, UpdateUserRequestBody requestBody);
 
-    void destroyUser(Long userId);
+    void delete(Long userId);
 }

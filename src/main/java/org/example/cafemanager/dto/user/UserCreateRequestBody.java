@@ -5,19 +5,18 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class UserCreateRequestBody {
-    @NotBlank(message = "First Name is required")
-    @Length(max = 32, min = 5, message = "First name must contain at from 5 to 32 symbols")
+    @Length(max = 255, message = "First name is very long")
     private String firstName;
 
-    @NotBlank(message = "Last Name is required")
-    @Length(max = 32, min = 5, message = "Last name must contain at from 5 to 32 symbols")
+    @Length(max = 255, message = "Last name is very long")
     private String lastName;
 
     @NotBlank(message = "Username is required")
-    @Length(max = 32, min = 5, message = "Username must contain at from 5 to 32 symbols")
+    @Length(max = 255, min = 5, message = "Username must contain at from 5 to 32 symbols")
     private String username;
 
     @NotBlank(message = "Email is required")
+    @Length(max = 255, min = 5, message = "Email must contain at from 5 to 32 symbols")
     @Email(message = "Email is not valid")
     private String email;
 

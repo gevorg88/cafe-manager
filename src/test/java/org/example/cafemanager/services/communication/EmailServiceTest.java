@@ -1,15 +1,13 @@
 package org.example.cafemanager.services.communication;
 
-import org.example.cafemanager.domain.User;
 import org.example.cafemanager.dto.user.CreateUserRequest;
-import org.junit.Assert;
+import org.example.cafemanager.services.communication.impls.EmailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.verification.VerificationMode;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.MailSender;
 

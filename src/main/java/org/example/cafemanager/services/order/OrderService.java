@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.order.contracts;
+package org.example.cafemanager.services.order;
 
 import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.ProductsInOrder;
@@ -10,11 +10,11 @@ import org.example.cafemanager.dto.order.UpdateProductInOrderDto;
 public interface OrderService {
     Order createOrder(OrderDetails orderDetails);
 
-    void destroyProductInOrder(Long orderId, Long pioId, User user);
+    void deleteProductInOrder(Long orderId, Long productInOrderId, User user);
 
     ProductsInOrder updateProductInOrder(UpdateProductInOrderDto productUpdate);
 
-    Order updateStatus(Long orderId, Status status, User user);
+    Order updateOrderStatus(Long orderId, Status status, User user);
 
     void deleteOrder(Long orderId, User user);
 }

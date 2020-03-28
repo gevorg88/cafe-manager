@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.product.contracts;
+package org.example.cafemanager.services.product;
 
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.domain.Product;
@@ -9,15 +9,13 @@ import java.util.Collection;
 
 public interface ProductService {
 
-    Iterable<Product> all();
-
     Collection<SimpleProductProps> getAllProducts();
 
-    Product createProduct(ProductCreate createDto);
+    Product create(ProductCreate createDto);
 
     Product update(Long id, CreateProductRequest requestBody);
 
     Product findOneById(Long productId);
 
-    void destroy(Long productId);
+    void delete(Long productId);
 }

@@ -5,9 +5,10 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,32 +18,39 @@ import java.util.Set;
 
 @Entity
 @Component
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_user_email", columnList = "email"),
+        @Index(name = "idx_user_username", columnList = "username")
+})
 public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name")
-    @Length(max = 32, message = "Your first_name is very long")
+    @Length(max = 255, message = "Your first_name is very long")
     private String firstName;
 
     @Column(name = "last_name")
-    @Length(max = 32, message = "Your first_name is very long")
+    @Length(max = 255, message = "Your first_name is very long")
     private String lastName;
 
     @Column(name = "username", unique = true)
     @NotBlank(message = "Username is required")
-    @Length(max = 32, message = "Username is very long")
+    @Length(max = 255, message = "Username is very long")
+    @Length(min = 5, message = "Username is very short")
     private String username;
 
     @NotBlank(message = "Email is required")
+    @Length(max = 255, message = "Email is very long")
+    @Length(min = 5, message = "Email is very short")
     @Email(message = "Email is not valid")
     @Column(unique = true)
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Length(min = 6)
+    @Length(max = 255, message = "Password is very long")
+    @Length(min = 6, message = "Password must contains at least symbols")
     private String password;
 
     @Column(name = "role", nullable = false)

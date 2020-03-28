@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.user;
+package org.example.cafemanager.services.user.impls;
 
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Order;
@@ -6,20 +6,20 @@ import org.example.cafemanager.dto.user.UserPublicProfile;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
-import org.example.cafemanager.dto.user.UpdateUserRequest;
+import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.UserRepository;
 import org.example.cafemanager.services.communication.NotificationService;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
-import org.example.cafemanager.services.user.contracts.UserService;
+import org.example.cafemanager.services.user.UserService;
 import org.example.cafemanager.utilities.SecurityUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,15 +56,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public Iterable<User> findAllUsers() {
         return userRepo.findAll();
     }
 
     @Override
-    public User createUser(CreateUserRequest createUserRequest, Role role) {
+    public User create(@NotNull CreateUserRequest createUserRequest, @NotNull Role role) {
+        Assert.notNull(createUserRequest, "CreateUserRequest can not be null");
+        Assert.notNull(role, "Role can not be null");
         Assert.notNull(createUserRequest.getEmail(), "Email not provided");
+        Assert.notNull(createUserRequest.getUsername(), "Username not provided");
+
         if (findByUsernameOrEmail(createUserRequest.getUsername(), createUserRequest.getEmail()) != null) {
-            throw new MustBeUniqueException("username");
+            throw new MustBeUniqueException("username or email");
         }
 
         User user = new User();
@@ -81,6 +85,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(createUserRequest.getLastName());
         user.setRole(role);
         save(user);
+
         notificationService.notify(createUserRequest);
         return user;
     }
@@ -96,13 +101,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepo.findUserById(id);
+    public User getUserById(Long userId) {
+        return userRepo.findUserById(userId);
     }
 
     @Override
-    public User update(Long id, UpdateUserRequest requestBody) {
-        User user = userRepo.findUserById(id);
+    public User update(Long userId, UpdateUserRequestBody requestBody) {
+        Assert.notNull(requestBody, "UpdateUserRequestBody can not be null");
+
+        User user = userRepo.findUserById(userId);
         if (null == user) {
             throw new InstanceNotFoundException("user");
         }
@@ -121,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void destroyUser(Long userId) {
+    public void delete(Long userId) {
         User user = userRepo.findUserById(userId);
 
         if (null == user) {

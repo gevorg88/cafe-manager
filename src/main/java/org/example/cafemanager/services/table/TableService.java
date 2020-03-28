@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.table.contracts;
+package org.example.cafemanager.services.table;
 
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
@@ -9,17 +9,15 @@ import java.util.Collection;
 public interface TableService {
     Collection<SimpleTableProps> getAllTables();
 
-    CafeTable createTable(TableCreate createDto);
+    CafeTable create(TableCreate createDto);
 
     String assignUser(Long tableId, Long userId);
 
-    void destroyTable(Long tableId);
+    void delete(Long tableId);
 
     CafeTable update(Long id, TableCreateRequestBody requestBody);
 
-    Collection<OnlyTableProps> getUserAssignedTables(Long id);
-
     Collection<TableWithOpenOrdersCount> getUserAssignedTablesWithOpenStatus(Long userId);
 
-    CafeTable getUserAssignedTable(Long tableID, User user);
+    CafeTable getUserAssignedTable(Long tableId, User user);
 }

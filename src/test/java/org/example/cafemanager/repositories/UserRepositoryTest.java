@@ -1,22 +1,16 @@
 package org.example.cafemanager.repositories;
 
-import org.example.Util;
+import org.example.utils.Util;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class UserRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,133 +18,92 @@ public class UserRepositoryTest extends AbstractTransactionalJUnit4SpringContext
     @Autowired
     private TestEntityManager entityManager;
 
-    private final String email = "test@test.test";
-
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutPassword() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setUsername(Util.randomString(6));
-        u.setEmail(this.email);
-        u.setRole(Role.WAITER);
+        User u = createUser();
+        u.setPassword(null);
         entityManager.persist(u);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutEmail() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setUsername(Util.randomString(6));
-        u.setPassword(Util.randomString(6));
-        u.setRole(Role.WAITER);
+        User u = createUser();
+        u.setEmail(null);
         entityManager.persist(u);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutUsername() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setEmail(this.email);
-        u.setPassword(Util.randomString(6));
-        u.setRole(Role.WAITER);
+        User u = createUser();
+        u.setUsername(null);
         entityManager.persist(u);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test(expected = PersistenceException.class)
     public void persistUserWithDupEmail() {
-        User u1 = new User();
-        u1.setFirstName(Util.randomString(6));
-        u1.setLastName(Util.randomString(6));
-        u1.setUsername(Util.randomString(6));
-        u1.setEmail(this.email);
-        u1.setPassword(Util.randomString(6));
-        u1.setRole(Role.WAITER);
+        User u1 = createUser();
         entityManager.persist(u1);
         entityManager.flush();
 
-        User u2 = new User();
-        u2.setFirstName(Util.randomString(6));
-        u2.setLastName(Util.randomString(6));
-        u2.setUsername(Util.randomString(6));
-        u2.setEmail(this.email);
-        u2.setPassword(Util.randomString(6));
-        u2.setRole(Role.WAITER);
+        User u2 = createUser();
         entityManager.persist(u2);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test(expected = PersistenceException.class)
     public void persistUserWithDupUsername() {
         String username = Util.randomString(6);
-        User u1 = new User();
-        u1.setFirstName(Util.randomString(6));
-        u1.setLastName(Util.randomString(6));
-        u1.setUsername(username);
-        u1.setEmail(this.email);
-        u1.setPassword(Util.randomString(6));
-        u1.setRole(Role.WAITER);
+        User u1 = createUser(username);
         entityManager.persist(u1);
         entityManager.flush();
 
-        User u2 = new User();
-        u2.setFirstName(Util.randomString(6));
-        u2.setLastName(Util.randomString(6));
+        User u2 = createUser(username);
         u2.setEmail("r" + this.email);
-        u2.setUsername(username);
-        u2.setPassword(Util.randomString(6));
-        u2.setRole(Role.WAITER);
         entityManager.persist(u2);
         entityManager.flush();
+
+        entityManager.clear();
     }
 
     @Test
     public void findByUsername() {
         String username = Util.randomString(6);
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setPassword(Util.randomString(6));
-        u.setUsername(username);
-        u.setEmail(this.email);
-        u.setRole(Role.WAITER);
+        User u = createUser(username);
         entityManager.persist(u);
         entityManager.flush();
 
         User found = userRepository.findUserByUsernameOrEmail(username, "email");
         Assert.assertEquals(found.getUsername(), username);
+
+        entityManager.clear();
     }
 
     @Test
     public void findByEmail() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setPassword(Util.randomString(6));
-        u.setUsername(Util.randomString(6));
-        u.setEmail(this.email);
-        u.setRole(Role.WAITER);
+        User u = createUser();
         entityManager.persist(u);
         entityManager.flush();
 
         User found = userRepository.findUserByEmail(this.email);
         Assert.assertEquals(found.getEmail(), this.email);
+
+        entityManager.clear();
     }
 
     @Test
     public void findAllByRole() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setPassword(Util.randomString(6));
-        u.setUsername(Util.randomString(6));
-        u.setEmail(this.email);
-        u.setRole(Role.WAITER);
+        User u = createUser();
         entityManager.persist(u);
         entityManager.flush();
 
@@ -158,17 +111,13 @@ public class UserRepositoryTest extends AbstractTransactionalJUnit4SpringContext
         Assert.assertEquals(
                 userRepository.findAllByRole(Role.WAITER).size(), 1
         );
+
+        entityManager.clear();
     }
 
     @Test
     public void findById() {
-        User u = new User();
-        u.setFirstName(Util.randomString(6));
-        u.setLastName(Util.randomString(6));
-        u.setPassword(Util.randomString(6));
-        u.setUsername(Util.randomString(6));
-        u.setEmail(this.email);
-        u.setRole(Role.WAITER);
+        User u = createUser();
         entityManager.persist(u);
         entityManager.flush();
 
@@ -176,5 +125,7 @@ public class UserRepositoryTest extends AbstractTransactionalJUnit4SpringContext
         Assert.assertEquals(
                 user, u
         );
+
+        entityManager.clear();
     }
 }
