@@ -1,6 +1,6 @@
 package org.example.cafemanager.repositories;
 
-import org.example.utils.Util;
+import org.example.cafemanager.EntitiesBuilder;
 import org.example.cafemanager.domain.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class ProductsInOrderRepositoryRepositoryTest extends AbstractRepositoryT
 
     @Test(expected = PersistenceException.class)
     public void persistProductsInOrderWithoutProduct() {
-        ProductsInOrder pio = createProductInOrder();
+        ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
         pio.setProduct(null);
         entityManager.persist(pio.getOrder().getCafeTable());
         entityManager.persist(pio.getOrder());
@@ -31,7 +31,7 @@ public class ProductsInOrderRepositoryRepositoryTest extends AbstractRepositoryT
 
     @Test(expected = PersistenceException.class)
     public void persistProductsInOrderWithoutOrder() {
-        ProductsInOrder pio = createProductInOrder();
+        ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
         pio.setOrder(null);
 
         entityManager.persist(pio.getProduct());
@@ -43,7 +43,7 @@ public class ProductsInOrderRepositoryRepositoryTest extends AbstractRepositoryT
 
     @Test
     public void productsInOrderIsCreated() {
-        ProductsInOrder pio = createProductInOrder();
+        ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
 
         entityManager.persist(pio.getOrder().getCafeTable());
         entityManager.persist(pio.getOrder());

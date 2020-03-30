@@ -1,5 +1,6 @@
 package org.example.cafemanager.repositories;
 
+import org.example.cafemanager.EntitiesBuilder;
 import org.example.cafemanager.domain.Order;
 import org.example.cafemanager.domain.enums.Status;
 import org.junit.Assert;
@@ -18,7 +19,7 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = PersistenceException.class)
     public void persistOrderWithoutStatus() {
-        Order order = createOrder();
+        Order order = EntitiesBuilder.createOrder();
         order.setStatus(null);
 
         entityManager.persist(order.getCafeTable());
@@ -29,7 +30,7 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = PersistenceException.class)
     public void persistOrderWithoutTable() {
-        Order order = createOrder();
+        Order order = EntitiesBuilder.createOrder();
         order.setCafeTable(null);
 
         entityManager.persist(order);
@@ -39,7 +40,7 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findOrderByStatusAndCafeTable() {
-        Order order = createOrder();
+        Order order = EntitiesBuilder.createOrder();
 
         entityManager.persist(order.getCafeTable());
         entityManager.persist(order);
@@ -50,8 +51,8 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
     }
     @Test
     public void getByIdAndCafeTable_User() {
-        Order order = createOrder();
-        order.getCafeTable().setUser(createUser());
+        Order order = EntitiesBuilder.createOrder();
+        order.getCafeTable().setUser(EntitiesBuilder.createUser());
 
         entityManager.persist(order.getCafeTable().getUser());
         entityManager.persist(order.getCafeTable());

@@ -1,5 +1,6 @@
 package org.example.cafemanager.services.communication;
 
+import org.example.cafemanager.Util;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.services.communication.impls.EmailService;
 import org.junit.Test;
@@ -41,7 +42,8 @@ public class EmailServiceTest {
 
     @Test
     public void testNotify() {
-        CreateUserRequest u = new CreateUserRequest("asd", "asd", "asd");
+        String testText = Util.randomString(5);
+        CreateUserRequest u = new CreateUserRequest(testText, testText, testText + "@mail.mail");
         emailService.notify(u);
         Mockito.verify(jmsTemplate, Mockito.only()).convertAndSend("mailbox", u);
     }

@@ -1,6 +1,7 @@
 package org.example.cafemanager.repositories;
 
-import org.example.utils.Util;
+import org.example.cafemanager.EntitiesBuilder;
+import org.example.cafemanager.Util;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
@@ -33,7 +34,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void persistTableWithVeryLongName() {
-        CafeTable table = createCafeTable(Util.randomString(256));
+        CafeTable table = EntitiesBuilder.createCafeTable(Util.randomString(256));
         entityManager.persist(table);
         entityManager.flush();
 
@@ -42,8 +43,8 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findAllBy() {
-        CafeTable table1 = createCafeTable();
-        CafeTable table2 = createCafeTable();
+        CafeTable table1 = EntitiesBuilder.createCafeTable();
+        CafeTable table2 = EntitiesBuilder.createCafeTable();
         entityManager.persist(table1);
         entityManager.persist(table2);
         entityManager.flush();
@@ -56,7 +57,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void findOneByName() {
         String name = Util.randomString(5);
-        CafeTable table = createCafeTable(name);
+        CafeTable table = EntitiesBuilder.createCafeTable(name);
         entityManager.persist(table);
         entityManager.flush();
 
@@ -68,7 +69,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findCafeTableById() {
-        CafeTable table = createCafeTable();
+        CafeTable table = EntitiesBuilder.createCafeTable();
         entityManager.persist(table);
         entityManager.flush();
 
@@ -83,7 +84,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void findCafeTableByNameAndIdIsNot() {
         String name = Util.randomString(6);
-        CafeTable table = createCafeTable(name);
+        CafeTable table = EntitiesBuilder.createCafeTable(name);
         entityManager.persist(table);
         entityManager.flush();
 
@@ -97,8 +98,8 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void getAllByUserIds() {
-        User user = createUser();
-        CafeTable table = createCafeTable(user);
+        User user = EntitiesBuilder.createUser();
+        CafeTable table = EntitiesBuilder.createCafeTable(user);
 
         entityManager.persist(user);
         entityManager.persist(table);
@@ -111,8 +112,8 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void userTablesWithoutOrders() {
-        User user = createUser();
-        CafeTable table = createCafeTable(user);
+        User user = EntitiesBuilder.createUser();
+        CafeTable table = EntitiesBuilder.createCafeTable(user);
 
         entityManager.persist(table);
         entityManager.persist(user);
@@ -131,8 +132,8 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findCafeTableByIdAndUser() {
-        User user = createUser();
-        CafeTable table = createCafeTable(user);
+        User user = EntitiesBuilder.createUser();
+        CafeTable table = EntitiesBuilder.createCafeTable(user);
 
         entityManager.persist(table);
         entityManager.persist(user);

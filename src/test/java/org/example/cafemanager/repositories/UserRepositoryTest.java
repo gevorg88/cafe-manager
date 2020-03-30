@@ -1,6 +1,7 @@
 package org.example.cafemanager.repositories;
 
-import org.example.utils.Util;
+import org.example.cafemanager.EntitiesBuilder;
+import org.example.cafemanager.Util;
 import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutPassword() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         u.setPassword(null);
         entityManager.persist(u);
         entityManager.flush();
@@ -30,7 +31,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutEmail() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         u.setEmail(null);
         entityManager.persist(u);
         entityManager.flush();
@@ -40,7 +41,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void persistUserWithoutUsername() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         u.setUsername(null);
         entityManager.persist(u);
         entityManager.flush();
@@ -50,11 +51,11 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test(expected = PersistenceException.class)
     public void persistUserWithDupEmail() {
-        User u1 = createUser();
+        User u1 = EntitiesBuilder.createUser();
         entityManager.persist(u1);
         entityManager.flush();
 
-        User u2 = createUser();
+        User u2 = EntitiesBuilder.createUser();
         entityManager.persist(u2);
         entityManager.flush();
 
@@ -64,12 +65,12 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
     @Test(expected = PersistenceException.class)
     public void persistUserWithDupUsername() {
         String username = Util.randomString(6);
-        User u1 = createUser(username);
+        User u1 = EntitiesBuilder.createUser(username);
         entityManager.persist(u1);
         entityManager.flush();
 
-        User u2 = createUser(username);
-        u2.setEmail("r" + this.email);
+        User u2 = EntitiesBuilder.createUser(username);
+        u2.setEmail("r" + EntitiesBuilder.email);
         entityManager.persist(u2);
         entityManager.flush();
 
@@ -79,7 +80,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void findByUsername() {
         String username = Util.randomString(6);
-        User u = createUser(username);
+        User u = EntitiesBuilder.createUser(username);
         entityManager.persist(u);
         entityManager.flush();
 
@@ -91,19 +92,19 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findByEmail() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         entityManager.persist(u);
         entityManager.flush();
 
-        User found = userRepository.findUserByEmail(this.email);
-        Assert.assertEquals(found.getEmail(), this.email);
+        User found = userRepository.findUserByEmail(EntitiesBuilder.email);
+        Assert.assertEquals(found.getEmail(), EntitiesBuilder.email);
 
         entityManager.clear();
     }
 
     @Test
     public void findAllByRole() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         entityManager.persist(u);
         entityManager.flush();
 
@@ -117,7 +118,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findById() {
-        User u = createUser();
+        User u = EntitiesBuilder.createUser();
         entityManager.persist(u);
         entityManager.flush();
 

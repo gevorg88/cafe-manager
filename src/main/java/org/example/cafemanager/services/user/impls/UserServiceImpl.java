@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -50,9 +51,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "findUserByEmailAndEmail")
+    @Cacheable("findUserByEmailAndEmail")
     public User findByUsernameOrEmail(String username, String email) {
-        return userRepo.findUserByUsernameOrEmail(username,email);
+        return userRepo.findUserByUsernameOrEmail(username, email);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Long userId, UpdateUserRequestBody requestBody) {
+    public User update(Long userId, @NotNull UpdateUserRequestBody requestBody) {
         Assert.notNull(requestBody, "UpdateUserRequestBody can not be null");
 
         User user = userRepo.findUserById(userId);

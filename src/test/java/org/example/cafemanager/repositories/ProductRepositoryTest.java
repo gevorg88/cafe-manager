@@ -1,6 +1,7 @@
 package org.example.cafemanager.repositories;
 
-import org.example.utils.Util;
+import org.example.cafemanager.EntitiesBuilder;
+import org.example.cafemanager.Util;
 import org.example.cafemanager.domain.Product;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,8 +31,8 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
     public void persistOrderWithDupName() {
         String name = Util.randomString(6);
 
-        Product product1 = createProduct(name);
-        Product product2 = createProduct(name);
+        Product product1 = EntitiesBuilder.createProduct(name);
+        Product product2 = EntitiesBuilder.createProduct(name);
 
         entityManager.persist(product1);
         entityManager.persist(product2);
@@ -41,7 +42,7 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findAllBy() {
-        Product product = createProduct();
+        Product product = EntitiesBuilder.createProduct();
 
         entityManager.persist(product);
         entityManager.flush();
@@ -53,7 +54,7 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void findProductByName() {
         String name = Util.randomString(6);
-        Product product = createProduct(name);
+        Product product = EntitiesBuilder.createProduct(name);
 
         entityManager.persist(product);
         entityManager.flush();
@@ -64,7 +65,7 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     public void findProductById() {
-        Product product = createProduct();
+        Product product = EntitiesBuilder.createProduct();
 
         entityManager.persist(product);
         entityManager.flush();
@@ -76,7 +77,7 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void findProductByNameAndIdIsNot() {
         String name = Util.randomString(6);
-        Product product = createProduct(name);
+        Product product = EntitiesBuilder.createProduct(name);
 
         entityManager.persist(product);
         entityManager.flush();
