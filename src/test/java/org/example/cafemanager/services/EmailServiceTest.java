@@ -26,16 +26,12 @@ public class EmailServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNotifyWithInvalidArguments() {
-
         emailService.notify(null);
-
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNotifyWithInvalidEmail () {
-
         CreateUserRequest u = new CreateUserRequest();
-
         emailService.notify(u);
 
     }
