@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.communication;
+package org.example.cafemanager.services;
 
 import org.example.cafemanager.Util;
 import org.example.cafemanager.dto.user.CreateUserRequest;

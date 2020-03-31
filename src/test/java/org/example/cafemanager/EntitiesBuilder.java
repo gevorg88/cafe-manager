@@ -3,7 +3,9 @@ package org.example.cafemanager;
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
+import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.user.CreateUserRequest;
+import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
 
 public class EntitiesBuilder {
@@ -84,7 +86,14 @@ public class EntitiesBuilder {
         );
     }
 
-    public static UserPublicProfile createUserPublicProfile(Long userId){
+    public static UpdateUserRequestBody createUpdateUserRequestBody() {
+        UpdateUserRequestBody u = new UpdateUserRequestBody();
+        u.setFirstName(Util.randomString(6));
+        u.setLastName(Util.randomString(6));
+        return u;
+    }
+
+    public static UserPublicProfile createUserPublicProfile(Long userId) {
         return new UserPublicProfile() {
             @Override
             public Long getId() {
@@ -109,6 +118,36 @@ public class EntitiesBuilder {
             @Override
             public String getEmail() {
                 return email;
+            }
+        };
+    }
+
+    public static SimpleTableProps createSimpleTableProps(Long tableId) {
+        return new SimpleTableProps() {
+            @Override
+            public Long getId() {
+                return tableId;
+            }
+
+            @Override
+            public String getName() {
+                return Util.randomString(4);
+            }
+
+            @Override
+            public FetchedUser getUser() {
+                User u = EntitiesBuilder.createUser();
+                return new FetchedUser() {
+                    @Override
+                    public Long getId() {
+                        return u.getId();
+                    }
+
+                    @Override
+                    public String getUsername() {
+                        return u.getUsername();
+                    }
+                };
             }
         };
     }

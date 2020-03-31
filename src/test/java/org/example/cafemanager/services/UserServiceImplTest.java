@@ -1,4 +1,4 @@
-package org.example.cafemanager.services.user;
+package org.example.cafemanager.services;
 
 import org.example.cafemanager.EntitiesBuilder;
 import org.example.cafemanager.Util;
@@ -6,11 +6,8 @@ import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UpdateUserRequestBody;
-import org.example.cafemanager.dto.user.UserCreateRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
-import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.UserRepository;
-import org.example.cafemanager.services.communication.NotificationService;
 import org.example.cafemanager.services.communication.impls.EmailService;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -22,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,9 +31,6 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private OrderRepository orderRepository;
-
-    @InjectMocks
     private EmailService notificationService;
 
     @Test
@@ -76,68 +69,50 @@ public class UserServiceImplTest {
     }
 
     @Test
-    //TODO discuss
     public void create() {
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
 
         User u = EntitiesBuilder.createUser();
         u.setUsername(uq.getUsername());
+        User user = userService.create(uq, Role.WAITER);
 
-        Mockito
-                .when(userService.create(uq, Role.WAITER))
-                .thenReturn(u);
-        Assert.assertEquals(uq.getUsername(), u.getUsername());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createWithNullableRequest() {
-        User u = EntitiesBuilder.createUser();
-        Mockito
-                .when(userService.create(null, Role.WAITER))
-                .thenReturn(u);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createWithNullableStatus() {
-        User u = EntitiesBuilder.createUser();
-        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
-        Mockito
-                .when(userService.create(uq, null))
-                .thenReturn(u);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createWithNullableEmail() {
-        User u = EntitiesBuilder.createUser();
-        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
-        uq.setEmail(null);
-        Mockito
-                .when(userService.create(uq, null))
-                .thenReturn(u);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createWithNullableUsername() {
-        User u = EntitiesBuilder.createUser();
-        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
-        uq.setUsername(null);
-        Mockito
-                .when(userService.create(uq, null))
-                .thenReturn(u);
+        Assert.assertNotNull(user);
+        Assert.assertEquals(user.getUsername(), uq.getUsername());
+        Mockito.verify(notificationService, Mockito.times(1)).notify(uq);
     }
 
     @Test
+    public void createWithNullableRequest() {
+        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(null, Role.WAITER));
+    }
+
+    @Test
+    public void createWithNullableStatus() {
+        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(EntitiesBuilder.createCreateUserRequest(), null));
+    }
+
+    @Test
+    public void createWithNullableEmail() {
+        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
+        uq.setEmail(null);
+        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(uq, Role.WAITER));
+    }
+
+    @Test
+    public void createWithNullableUsername() {
+        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
+        uq.setUsername(null);
+        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(uq, Role.WAITER));
+    }
+
+    @Test
+    //TODO discuss
     public void createWithDuplicateUsername() {
         User u = EntitiesBuilder.createUser();
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
-
-        Mockito
-                .when(userRepository.save(u))
-                .thenReturn(u);
-        uq.setUsername(u.getUsername());
-        Assert.assertThrows(MustBeUniqueException.class, () -> {
-            userService.create(uq, Role.WAITER);
-        });
+        userRepository.save(u);
+        uq.setEmail(u.getEmail() + "asd");
+        Assert.assertThrows(MustBeUniqueException.class, () -> userService.create(uq, Role.WAITER));
     }
 
     @Test
@@ -189,9 +164,38 @@ public class UserServiceImplTest {
 
     @Test
     public void update() {
+        UpdateUserRequestBody u = EntitiesBuilder.createUpdateUserRequestBody();
+        User user = EntitiesBuilder.createUser();
+        user.setFirstName(u.getFirstName());
+        user.setLastName(u.getLastName());
+        user.setId(1L);
+        Mockito
+                .when(userRepository.findUserById(user.getId()))
+                .thenReturn(user);
+        User updatedUser = userService.update(user.getId(), u);
+        Assert.assertEquals(u.getFirstName(), updatedUser.getFirstName());
+        Assert.assertEquals(u.getLastName(), updatedUser.getLastName());
     }
 
     @Test
     public void delete() {
+        User u = EntitiesBuilder.createUser();
+        u.setId(1L);
+        Mockito
+                .when(userRepository.findUserById(u.getId()))
+                .thenReturn(u);
+        Assert.assertTrue(userService.delete(u.getId()));
+    }
+
+    @Test
+    public void deleteWithNotFoundException() {
+        User u = EntitiesBuilder.createUser();
+        u.setId(1L);
+        Mockito
+                .when(userRepository.findUserById(u.getId() + 1))
+                .thenReturn(u);
+        Assert.assertThrows(InstanceNotFoundException.class, () -> {
+            userService.delete(u.getId());
+        });
     }
 }

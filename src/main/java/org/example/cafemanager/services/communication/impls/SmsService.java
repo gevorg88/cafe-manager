@@ -10,6 +10,5 @@ public class SmsService implements NotificationService {
     @Override
     public void notify(final CreateUserRequest user) {
         System.out.println("Received <" + user + ">");
-
     }
 }
