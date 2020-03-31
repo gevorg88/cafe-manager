@@ -5,7 +5,8 @@ import org.example.cafemanager.dto.user.CreateUserRequest;
 public interface NotificationService {
 
     /**
-     *  Send notification to user
+     * Send notification to user
+     * 
      * @param user
      */
     void notify(CreateUserRequest user);

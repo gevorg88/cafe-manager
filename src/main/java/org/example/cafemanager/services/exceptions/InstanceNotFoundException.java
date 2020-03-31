@@ -2,7 +2,7 @@ package org.example.cafemanager.services.exceptions;
 
 import javax.validation.constraints.NotNull;
 
-public class InstanceNotFoundException extends RuntimeException{
+public class InstanceNotFoundException extends RuntimeException {
     public InstanceNotFoundException() {
         this("Instance");
     }

@@ -26,10 +26,7 @@ public class TableServiceImpl implements TableService {
     private final UserService userService;
 
     @Autowired
-    public TableServiceImpl(
-            CafeTableRepository cafeTableRepository,
-            UserService userService
-    ) {
+    public TableServiceImpl(CafeTableRepository cafeTableRepository, UserService userService) {
         tableRepo = cafeTableRepository;
         this.userService = userService;
     }

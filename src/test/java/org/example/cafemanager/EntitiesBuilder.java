@@ -79,11 +79,7 @@ public class EntitiesBuilder {
     }
 
     public static CreateUserRequest createCreateUserRequest() {
-        return new CreateUserRequest(
-                Util.randomString(6),
-                Util.randomString(6),
-                email
-        );
+        return new CreateUserRequest(Util.randomString(6), Util.randomString(6), email);
     }
 
     public static UpdateUserRequestBody createUpdateUserRequestBody() {

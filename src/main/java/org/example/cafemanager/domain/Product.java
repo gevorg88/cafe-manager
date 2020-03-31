@@ -1,7 +1,6 @@
 package org.example.cafemanager.domain;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,9 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "products", indexes = {
-        @Index(name = "idx_product_name", columnList = "name"),
-})
+@Table(name = "products", indexes = { @Index(name = "idx_product_name", columnList = "name"), })
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,8 +68,10 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Product product = (Product) o;
         return getId().equals(product.getId());
     }

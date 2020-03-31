@@ -9,11 +9,7 @@ public class OrderDetails {
     private List<ProductInOrderReq> prodsInOrder;
     private User user;
 
-    public OrderDetails(
-            Long tableId,
-            List<ProductInOrderReq> prodsInOrder,
-            User user
-    ) {
+    public OrderDetails(Long tableId, List<ProductInOrderReq> prodsInOrder, User user) {
         this.prodsInOrder = prodsInOrder;
         this.tableId = tableId;
         this.user = user;

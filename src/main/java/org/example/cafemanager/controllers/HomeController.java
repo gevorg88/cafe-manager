@@ -14,7 +14,7 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login(Authentication authentication) {
-        if (null !=authentication && authentication.isAuthenticated()) {
+        if (null != authentication && authentication.isAuthenticated()) {
             return "redirect:welcome";
         }
         return "login";
@@ -26,7 +26,7 @@ public class HomeController {
     }
 
     @GetMapping("/error/access-denied")
-    public String accessDenied(){
+    public String accessDenied() {
         return "error/access-denied";
     }
 }

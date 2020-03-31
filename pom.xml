@@ -194,6 +194,20 @@
                     </schemas>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>1.26.0</version>
+                <configuration>
+                    <java>
+                        <removeUnusedImports/>
+                        <eclipse>
+                            <file>${project.basedir}/eclipse-fmt.xml</file>
+                            <version>4.7.1</version>
+                        </eclipse>
+                    </java>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

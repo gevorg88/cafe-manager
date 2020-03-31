@@ -8,9 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "cafe_tables",indexes = {
-        @Index(name = "idx_cafe_table_name", columnList = "name"),
-})
+@Table(name = "cafe_tables", indexes = { @Index(name = "idx_cafe_table_name", columnList = "name"), })
 public class CafeTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,18 +67,15 @@ public class CafeTable {
     }
 
     public boolean hasOpenTables() {
-        return this.orders
-                .stream()
-                .anyMatch((order -> order
-                        .getStatus()
-                        .equals(Status.OPEN)
-                ));
+        return this.orders.stream().anyMatch((order -> order.getStatus().equals(Status.OPEN)));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         CafeTable cafeTable = (CafeTable) o;
         return getId().equals(cafeTable.getId());
     }

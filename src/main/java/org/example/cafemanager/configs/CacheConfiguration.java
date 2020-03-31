@@ -31,8 +31,8 @@ public class CacheConfiguration implements CachingConfigurer {
             @Override
             @Nonnull
             protected Cache createConcurrentMapCache(final String name) {
-                return new ConcurrentMapCache(name,
-                        CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(100).build().asMap(), false);
+                return new ConcurrentMapCache(name, CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES)
+                        .maximumSize(100).build().asMap(), false);
             }
         };
     }
@@ -46,8 +46,7 @@ public class CacheConfiguration implements CachingConfigurer {
     @Bean("customKeyGenerator")
     public KeyGenerator keyGenerator() {
         return (Object target, Method method, Object... params) -> target.getClass().getSimpleName() + "_"
-                + method.getName() + "_"
-                + StringUtils.arrayToDelimitedString(params, "_");
+                + method.getName() + "_" + StringUtils.arrayToDelimitedString(params, "_");
     }
 
     @Override

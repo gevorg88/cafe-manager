@@ -30,7 +30,7 @@ public class EmailServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNotifyWithInvalidEmail () {
+    public void testNotifyWithInvalidEmail() {
         CreateUserRequest u = new CreateUserRequest();
         emailService.notify(u);
 

@@ -19,18 +19,12 @@ public class Order {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(
-            name = "table_id",
-            nullable = false
-    )
+    @JoinColumn(name = "table_id", nullable = false)
     private CafeTable cafeTable;
 
     @ManyToMany
-    @JoinTable(
-            name = "products_in_order",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+    @JoinTable(name = "products_in_order", joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> products = new HashSet<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
@@ -94,8 +88,10 @@ public class Order {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Order order = (Order) o;
         return getId().equals(order.getId());
     }

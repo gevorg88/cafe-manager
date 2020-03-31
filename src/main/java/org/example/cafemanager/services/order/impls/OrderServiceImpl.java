@@ -30,8 +30,7 @@ public class OrderServiceImpl implements OrderService {
             OrderRepository orderRepository,
             ProductsInOrderRepository productsInOrderRepository,
             TableService tableService,
-            ProductService productService
-    ) {
+            ProductService productService) {
 
         this.orderRepository = orderRepository;
         this.tableService = tableService;
@@ -162,11 +161,8 @@ public class OrderServiceImpl implements OrderService {
 
     private ProductsInOrder ordersProductInOrder(@NotNull Order order, Long productInOrderId) {
         Assert.notNull(order, "Order can not be null");
-        ProductsInOrder pio = order.getProductsInOrders()
-                .stream()
-                .filter((productsInOrder) -> productsInOrder.getId().equals(productInOrderId))
-                .findFirst()
-                .orElse(null);
+        ProductsInOrder pio = order.getProductsInOrders().stream()
+                .filter((productsInOrder) -> productsInOrder.getId().equals(productInOrderId)).findFirst().orElse(null);
 
         if (null == pio) {
             throw new InstanceNotFoundException("Product In Order");

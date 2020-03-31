@@ -46,9 +46,7 @@ public class UserServiceImplTest {
         String username = Util.randomString(6);
         User u = EntitiesBuilder.createUser(username);
 
-        Mockito
-                .when(userRepository.findUserByUsernameOrEmail(username, EntitiesBuilder.email))
-                .thenReturn(u);
+        Mockito.when(userRepository.findUserByUsernameOrEmail(username, EntitiesBuilder.email)).thenReturn(u);
         Assert.assertEquals(userService.findByUsernameOrEmail(username, EntitiesBuilder.email), u);
     }
 
@@ -56,9 +54,7 @@ public class UserServiceImplTest {
     public void findAllUsers() {
         List<User> usersSet = Arrays.asList(EntitiesBuilder.createUser(), EntitiesBuilder.createUser());
 
-        Mockito
-                .when(userRepository.findAll())
-                .thenReturn(usersSet);
+        Mockito.when(userRepository.findAll()).thenReturn(usersSet);
         int size = 0;
         Iterator<User> usersIterator = userService.findAllUsers().iterator();
         for (; usersIterator.hasNext(); usersIterator.next()) {
@@ -83,30 +79,31 @@ public class UserServiceImplTest {
 
     @Test
     public void createWithNullableRequest() {
-        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(null, Role.WAITER));
+        Assert.assertThrows(IllegalArgumentException.class, () -> userService.create(null, Role.WAITER));
     }
 
     @Test
     public void createWithNullableStatus() {
-        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(EntitiesBuilder.createCreateUserRequest(), null));
+        Assert.assertThrows(IllegalArgumentException.class,
+                () -> userService.create(EntitiesBuilder.createCreateUserRequest(), null));
     }
 
     @Test
     public void createWithNullableEmail() {
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
         uq.setEmail(null);
-        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(uq, Role.WAITER));
+        Assert.assertThrows(IllegalArgumentException.class, () -> userService.create(uq, Role.WAITER));
     }
 
     @Test
     public void createWithNullableUsername() {
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
         uq.setUsername(null);
-        Assert.assertThrows(IllegalArgumentException.class, ()->userService.create(uq, Role.WAITER));
+        Assert.assertThrows(IllegalArgumentException.class, () -> userService.create(uq, Role.WAITER));
     }
 
     @Test
-    //TODO discuss
+    // TODO discuss
     public void createWithDuplicateUsername() {
         User u = EntitiesBuilder.createUser();
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
@@ -124,10 +121,8 @@ public class UserServiceImplTest {
 
     @Test
     public void getAllWaiters() {
-        List<UserPublicProfile> users = Arrays.asList(
-                EntitiesBuilder.createUserPublicProfile(1L),
-                EntitiesBuilder.createUserPublicProfile(2L)
-        );
+        List<UserPublicProfile> users =
+                Arrays.asList(EntitiesBuilder.createUserPublicProfile(1L), EntitiesBuilder.createUserPublicProfile(2L));
         Mockito.when(userRepository.findAllByRole(Role.WAITER)).thenReturn(users);
         Assert.assertEquals(userService.getAllWaiters().size(), users.size());
     }
@@ -137,26 +132,21 @@ public class UserServiceImplTest {
         Long id = 1L;
         User user = EntitiesBuilder.createUser();
         user.setId(id);
-        Mockito.when(userRepository.findUserById(id))
-                .thenReturn(user);
+        Mockito.when(userRepository.findUserById(id)).thenReturn(user);
         Assert.assertEquals(user, userService.getUserById(id));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void updateWithNullUpdateUserRequestBody() {
         User u = EntitiesBuilder.createUser();
-        Mockito
-                .when(userService.update(1L, null))
-                .thenReturn(u);
+        Mockito.when(userService.update(1L, null)).thenReturn(u);
     }
 
     @Test
     public void updateWithNotFoundException() {
         User u = EntitiesBuilder.createUser();
         u.setId(1L);
-        Mockito
-                .when(userRepository.findUserById(u.getId()))
-                .thenReturn(u);
+        Mockito.when(userRepository.findUserById(u.getId())).thenReturn(u);
         Assert.assertThrows(InstanceNotFoundException.class, () -> {
             userService.update(2L, new UpdateUserRequestBody());
         });
@@ -169,9 +159,7 @@ public class UserServiceImplTest {
         user.setFirstName(u.getFirstName());
         user.setLastName(u.getLastName());
         user.setId(1L);
-        Mockito
-                .when(userRepository.findUserById(user.getId()))
-                .thenReturn(user);
+        Mockito.when(userRepository.findUserById(user.getId())).thenReturn(user);
         User updatedUser = userService.update(user.getId(), u);
         Assert.assertEquals(u.getFirstName(), updatedUser.getFirstName());
         Assert.assertEquals(u.getLastName(), updatedUser.getLastName());
@@ -181,9 +169,7 @@ public class UserServiceImplTest {
     public void delete() {
         User u = EntitiesBuilder.createUser();
         u.setId(1L);
-        Mockito
-                .when(userRepository.findUserById(u.getId()))
-                .thenReturn(u);
+        Mockito.when(userRepository.findUserById(u.getId())).thenReturn(u);
         Assert.assertTrue(userService.delete(u.getId()));
     }
 
@@ -191,9 +177,7 @@ public class UserServiceImplTest {
     public void deleteWithNotFoundException() {
         User u = EntitiesBuilder.createUser();
         u.setId(1L);
-        Mockito
-                .when(userRepository.findUserById(u.getId() + 1))
-                .thenReturn(u);
+        Mockito.when(userRepository.findUserById(u.getId() + 1)).thenReturn(u);
         Assert.assertThrows(InstanceNotFoundException.class, () -> {
             userService.delete(u.getId());
         });

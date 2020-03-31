@@ -19,7 +19,6 @@ public class EmailService implements NotificationService {
 
     private final JavaMailSender emailSender;
 
-
     @Autowired
     public EmailService(final JmsTemplate jmsTemplate, final JavaMailSender emailSender) {
         this.jmsTemplate = jmsTemplate;
@@ -35,11 +34,12 @@ public class EmailService implements NotificationService {
 
     @JmsListener(destination = "mailbox", containerFactory = "jmsFactory")
     private void sendEmail(CreateUserRequest user) {
-        Assert.notNull(user.getEmail(),"Email is null");
+        Assert.notNull(user.getEmail(), "Email is null");
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Invitation");
-        message.setText("Hi! Please use on this password to access to your account. Your password is: " + user.getPassword());
+        message.setText(
+                "Hi! Please use on this password to access to your account. Your password is: " + user.getPassword());
         emailSender.send(message);
     }
 }

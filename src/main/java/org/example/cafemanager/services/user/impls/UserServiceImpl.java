@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(
             UserRepository userRepo,
             OrderRepository orderRepository,
-            NotificationService notificationService
-    ) {
+            NotificationService notificationService) {
         this.userRepo = userRepo;
         this.orderRepository = orderRepository;
         this.notificationService = notificationService;
@@ -76,11 +75,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(createUserRequest.getUsername());
         user.setEmail(createUserRequest.getEmail());
 
-        user.setPassword(
-                SecurityUtility
-                        .passwordEncoder()
-                        .encode(createUserRequest.getPassword())
-        );
+        user.setPassword(SecurityUtility.passwordEncoder().encode(createUserRequest.getPassword()));
 
         user.setFirstName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());

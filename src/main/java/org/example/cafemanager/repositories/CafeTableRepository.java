@@ -27,10 +27,12 @@ public interface CafeTableRepository extends CrudRepository<CafeTable, Long> {
 
     Collection<OnlyTableProps> getAllByUserIdIs(@NotNull Long id);
 
-    @Query(value = "select t.id as id, t.name as name, count(o.id) as orderCount from CafeTable t " +
-            "left join Order o on o.cafeTable.id = t.id and o.status = :status " +
-            "where t.user.id = :userId GROUP BY t.id")
-    Collection<TableWithOpenOrdersCount> userTablesWithOrdersForStatus(@NotNull @Param("userId") Long userId, @NotNull @Param("status") Status status);
+    @Query(value = "select t.id as id, t.name as name, count(o.id) as orderCount from CafeTable t "
+            + "left join Order o on o.cafeTable.id = t.id and o.status = :status "
+            + "where t.user.id = :userId GROUP BY t.id")
+    Collection<TableWithOpenOrdersCount> userTablesWithOrdersForStatus(
+            @NotNull @Param("userId") Long userId,
+            @NotNull @Param("status") Status status);
 
     CafeTable findCafeTableByIdAndUser(@NotNull Long tableId, @NotNull User user);
 }

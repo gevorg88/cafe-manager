@@ -39,21 +39,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> store(
-            @Valid @RequestBody UserCreateRequestBody requestBody,
-            Errors errors
-    ) throws Exception {
+    public ResponseEntity<?> store(@Valid @RequestBody UserCreateRequestBody requestBody, Errors errors)
+            throws Exception {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
 
-        CreateUserRequest createDto = new CreateUserRequest(
-                requestBody.getUsername(),
-                SecurityUtility.randomPassword(),
-                requestBody.getEmail()
-        );
+        CreateUserRequest createDto = new CreateUserRequest(requestBody.getUsername(), SecurityUtility.randomPassword(),
+                requestBody.getEmail());
         try {
             createDto.setFirstName(requestBody.getFirstName());
             createDto.setLastName(requestBody.getLastName());
@@ -74,8 +69,7 @@ public class UserController {
     public ResponseEntity<?> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequestBody requestBody,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));

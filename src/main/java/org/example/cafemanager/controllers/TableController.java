@@ -44,10 +44,7 @@ public class TableController {
     }
 
     @PostMapping("/manager")
-    public ResponseEntity<?> store(
-            @Valid @RequestBody TableCreateRequestBody requestBody,
-            Errors errors
-    ) {
+    public ResponseEntity<?> store(@Valid @RequestBody TableCreateRequestBody requestBody, Errors errors) {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -68,9 +65,7 @@ public class TableController {
     }
 
     @PostMapping("/manager/assign/{tableId}/{userId}")
-    public ResponseEntity<?> assignUser(
-            @PathVariable Long tableId,
-            @PathVariable Long userId) {
+    public ResponseEntity<?> assignUser(@PathVariable Long tableId, @PathVariable Long userId) {
         ResponseModel result = new ResponseModel();
         try {
             String res = tableService.assignUser(tableId, userId);
@@ -106,8 +101,7 @@ public class TableController {
     public ResponseEntity<?> update(
             @Valid @RequestBody TableCreateRequestBody requestBody,
             @PathVariable Long id,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -129,4 +123,3 @@ public class TableController {
         }
     }
 }
-

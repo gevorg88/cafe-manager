@@ -29,22 +29,14 @@ public class OrderController {
     private final TableService tableService;
     private final ProductService productService;
 
-    public OrderController(
-            OrderService orderService,
-            TableService tableService,
-            ProductService productService
-    ) {
+    public OrderController(OrderService orderService, TableService tableService, ProductService productService) {
         this.orderService = orderService;
         this.tableService = tableService;
         this.productService = productService;
     }
 
     @GetMapping("/manage/{tableId}")
-    public String index(
-            @PathVariable("tableId") Long tableId,
-            @AuthenticationPrincipal User user,
-            Model model
-    ) {
+    public String index(@PathVariable("tableId") Long tableId, @AuthenticationPrincipal User user, Model model) {
         String viewPath = "order/list";
         try {
             CafeTable table = tableService.getUserAssignedTable(tableId, user);
@@ -64,8 +56,7 @@ public class OrderController {
             @AuthenticationPrincipal User user,
             @PathVariable("tableId") Long tableId,
             @RequestBody CreateOrderRequest requestBody,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
@@ -89,10 +80,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<?> delete(
-            @PathVariable("orderId") Long orderId,
-            @AuthenticationPrincipal User user
-    ) {
+    public ResponseEntity<?> delete(@PathVariable("orderId") Long orderId, @AuthenticationPrincipal User user) {
         ResponseModel result = new ResponseModel();
         try {
             orderService.deleteOrder(orderId, user);
@@ -112,8 +100,7 @@ public class OrderController {
             @PathVariable("orderId") Long orderId,
             @AuthenticationPrincipal User user,
             @RequestBody OrderStatusUpdate orderStatus,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
@@ -139,8 +126,7 @@ public class OrderController {
             @PathVariable("pioId") Long productInOrderId,
             @AuthenticationPrincipal User user,
             @RequestBody PioUpdateReq requestBody,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
 
         if (errors.hasErrors()) {
@@ -149,12 +135,7 @@ public class OrderController {
         }
         try {
             orderService.updateProductInOrder(
-                    new UpdateProductInOrderDto(
-                            productInOrderId,
-                            orderId,
-                            user,
-                            requestBody.getAmount()
-                    ));
+                    new UpdateProductInOrderDto(productInOrderId, orderId, user, requestBody.getAmount()));
 
             result.setMessage("Product In Order has been successfully updated");
         } catch (InstanceNotFoundException e) {
@@ -171,8 +152,7 @@ public class OrderController {
     public ResponseEntity<?> deleteProductInOrder(
             @PathVariable("orderId") Long orderId,
             @PathVariable("pioId") Long productInOrderId,
-            @AuthenticationPrincipal User user
-    ) {
+            @AuthenticationPrincipal User user) {
         ResponseModel result = new ResponseModel();
         try {
             orderService.deleteProductInOrder(orderId, productInOrderId, user);

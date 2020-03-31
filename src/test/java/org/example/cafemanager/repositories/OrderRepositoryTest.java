@@ -49,6 +49,7 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
 
         Assert.assertNotNull(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, order.getCafeTable()));
     }
+
     @Test
     public void getByIdAndCafeTable_User() {
         Order order = EntitiesBuilder.createOrder();

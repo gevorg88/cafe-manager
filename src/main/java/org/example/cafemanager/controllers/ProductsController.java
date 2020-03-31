@@ -34,10 +34,7 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> store(
-            @Valid @RequestBody CreateProductRequest requestBody,
-            Errors errors
-    ) {
+    public ResponseEntity<?> store(@Valid @RequestBody CreateProductRequest requestBody, Errors errors) {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
@@ -61,8 +58,7 @@ public class ProductsController {
     public ResponseEntity<?> update(
             @Valid @RequestBody CreateProductRequest requestBody,
             @PathVariable Long productId,
-            Errors errors
-    ) {
+            Errors errors) {
         ResponseModel result = new ResponseModel();
         if (errors.hasErrors()) {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));

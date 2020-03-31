@@ -74,9 +74,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
         entityManager.flush();
 
         CafeTable table1 = cafeTableRepository.findCafeTableById(table.getId());
-        Assert.assertEquals(
-                table, table1
-        );
+        Assert.assertEquals(table, table1);
 
         entityManager.clear();
     }
@@ -89,9 +87,7 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
         entityManager.flush();
 
         CafeTable table1 = cafeTableRepository.findCafeTableByNameAndIdIsNot(name, table.getId() + 1);
-        Assert.assertEquals(
-                table, table1
-        );
+        Assert.assertEquals(table, table1);
 
         entityManager.clear();
     }
@@ -119,10 +115,9 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
         entityManager.persist(user);
         entityManager.flush();
 
-        Optional<TableWithOpenOrdersCount> t = cafeTableRepository
-                .userTablesWithOrdersForStatus(user.getId(), Status.OPEN)
-                .stream().findFirst();
-              Assert.assertTrue(t.isPresent());
+        Optional<TableWithOpenOrdersCount> t =
+                cafeTableRepository.userTablesWithOrdersForStatus(user.getId(), Status.OPEN).stream().findFirst();
+        Assert.assertTrue(t.isPresent());
         int count = t.get().getOrderCount();
 
         Assert.assertEquals(count, 0);

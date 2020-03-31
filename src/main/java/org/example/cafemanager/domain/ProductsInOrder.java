@@ -10,7 +10,7 @@ public class ProductsInOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "order_id",  nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     @ManyToOne
     private Order order;
 
@@ -65,8 +65,10 @@ public class ProductsInOrder {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ProductsInOrder that = (ProductsInOrder) o;
         return id.equals(that.id);
     }
@@ -78,11 +80,7 @@ public class ProductsInOrder {
 
     @Override
     public String toString() {
-        return "ProductsInOrder{" +
-                "id=" + id +
-                ", amount=" + amount +
-                ", order=" + order +
-                ", product=" + product +
-                '}';
+        return "ProductsInOrder{" + "id=" + id + ", amount=" + amount + ", order=" + order + ", product=" + product
+                + '}';
     }
 }

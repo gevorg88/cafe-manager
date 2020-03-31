@@ -4,8 +4,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 public class PioUpdateReq {
-    @Min(value=1, message="must be equal or greater than 1")
-    @Max(value=50, message="must be equal or less than 50")
+    @Min(value = 1, message = "must be equal or greater than 1")
+    @Max(value = 50, message = "must be equal or less than 50")
     private Integer amount = 1;
 
     public Integer getAmount() {

@@ -109,9 +109,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
         entityManager.flush();
 
         userRepository.findAllByRole(Role.WAITER);
-        Assert.assertEquals(
-                userRepository.findAllByRole(Role.WAITER).size(), 1
-        );
+        Assert.assertEquals(userRepository.findAllByRole(Role.WAITER).size(), 1);
 
         entityManager.clear();
     }
@@ -123,9 +121,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
         entityManager.flush();
 
         User user = userRepository.findUserById(u.getId());
-        Assert.assertEquals(
-                user, u
-        );
+        Assert.assertEquals(user, u);
 
         entityManager.clear();
     }

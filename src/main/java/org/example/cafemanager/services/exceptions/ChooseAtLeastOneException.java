@@ -2,7 +2,7 @@ package org.example.cafemanager.services.exceptions;
 
 import javax.validation.constraints.NotNull;
 
-public class ChooseAtLeastOneException extends RuntimeException{
+public class ChooseAtLeastOneException extends RuntimeException {
     public ChooseAtLeastOneException() {
         this("Instance");
     }

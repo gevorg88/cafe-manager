@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 
 public class ValidationMessagesCollector {
     public static String collectErrorMessages(Errors errors) {
-        return errors
-                .getAllErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
+        return errors.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining("\n"));
     }
 }
