@@ -110,8 +110,8 @@ public class UserServiceImplTest {
     public void createWithDuplicateUsername() {
         User u = EntitiesBuilder.createUser();
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
-        userRepository.save(u);
         uq.setEmail(u.getEmail() + "asd");
+        Mockito.when(userRepository.findUserByUsernameOrEmail(uq.getUsername(), uq.getEmail())).thenReturn(u);
         Assert.assertThrows(MustBeUniqueException.class, () -> userService.create(uq, Role.WAITER));
     }
 
