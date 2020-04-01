@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -103,11 +104,19 @@ public class UserServiceImplTest {
     }
 
     @Test
-    // TODO discuss
     public void createWithDuplicateUsername() {
         User u = EntitiesBuilder.createUser();
         CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
         uq.setEmail(u.getEmail() + "asd");
+        Mockito.when(userRepository.findUserByUsernameOrEmail(uq.getUsername(), uq.getEmail())).thenReturn(u);
+        Assert.assertThrows(MustBeUniqueException.class, () -> userService.create(uq, Role.WAITER));
+    }
+
+    @Test
+    public void createWithDuplicateEmail() {
+        User u = EntitiesBuilder.createUser();
+        CreateUserRequest uq = EntitiesBuilder.createCreateUserRequest();
+        uq.setUsername(u.getUsername() + "asd");
         Mockito.when(userRepository.findUserByUsernameOrEmail(uq.getUsername(), uq.getEmail())).thenReturn(u);
         Assert.assertThrows(MustBeUniqueException.class, () -> userService.create(uq, Role.WAITER));
     }

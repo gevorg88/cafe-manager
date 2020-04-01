@@ -3,7 +3,7 @@ package org.example.cafemanager.dto.user;
 import org.hibernate.validator.constraints.Length;
 
 public class UpdateUserRequestBody {
-    @Length(max = 255, message = "First name must is very long")
+    @Length(max = 255, message = "First name is is very long")
     private String firstName;
 
     @Length(max = 255, message = "Last name is very long")

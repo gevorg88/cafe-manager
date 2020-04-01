@@ -3,6 +3,7 @@ package org.example.cafemanager;
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
+import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UpdateUserRequestBody;
@@ -13,6 +14,7 @@ public class EntitiesBuilder {
 
     public static User createUser() {
         User u = new User();
+        u.setId(Util.randomLong());
         u.setEmail(email);
         u.setUsername(Util.randomString(6));
         u.setPassword(Util.randomString(6));
@@ -29,41 +31,43 @@ public class EntitiesBuilder {
         return u;
     }
 
-    public static CafeTable createCafeTable(String tableName) {
+    public static CafeTable createCafeTable() {
         CafeTable cafeTable = new CafeTable();
+        cafeTable.setId(Util.randomLong());
+        cafeTable.setName(Util.randomString(6));
+        return cafeTable;
+    }
+
+    public static CafeTable createCafeTable(String tableName) {
+        CafeTable cafeTable = createCafeTable();
         cafeTable.setName(tableName);
         return cafeTable;
     }
 
-    public static CafeTable createCafeTable() {
-        CafeTable cafeTable = new CafeTable();
-        cafeTable.setName(Util.randomString(6));
-        return cafeTable;
-    }
-
     public static CafeTable createCafeTable(User user) {
-        CafeTable cafeTable = new CafeTable();
-        cafeTable.setName(Util.randomString(6));
+        CafeTable cafeTable = createCafeTable();
         cafeTable.setUser(user);
         return cafeTable;
     }
 
     public static Order createOrder() {
         Order o = new Order();
+        o.setId(Util.randomLong());
         o.setCafeTable(createCafeTable());
         o.setStatus(Status.OPEN);
         return o;
     }
 
-    public static Product createProduct(String productName) {
-        Product product = new Product();
-        product.setName(productName);
-        return product;
-    }
-
     public static Product createProduct() {
         Product product = new Product();
         product.setName(Util.randomString(6));
+        product.setId(Util.randomLong());
+        return product;
+    }
+
+    public static Product createProduct(String productName) {
+        Product product = createProduct();
+        product.setName(productName);
         return product;
     }
 
@@ -74,7 +78,7 @@ public class EntitiesBuilder {
         p.setOrder(o);
         p.setProduct(createProduct());
         p.setAmount(1);
-
+        p.setId(Util.randomLong());
         return p;
     }
 
@@ -144,6 +148,21 @@ public class EntitiesBuilder {
                         return u.getUsername();
                     }
                 };
+            }
+        };
+    }
+
+    public static OnlyTableProps createOnlyTableProps(Long tableId){
+        String name = Util.randomString(6);
+        return new OnlyTableProps() {
+            @Override
+            public Long getId() {
+                return tableId;
+            }
+
+            @Override
+            public String getName() {
+                return name;
             }
         };
     }

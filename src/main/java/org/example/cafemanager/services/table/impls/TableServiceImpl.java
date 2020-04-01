@@ -63,7 +63,7 @@ public class TableServiceImpl implements TableService {
         if (-1 == userId) {
             table.setUser(null);
             tableRepo.save(table);
-            return "detached";
+            return CafeTable.DETACHED;
         }
 
         User user = userService.getUserById(userId);
@@ -74,7 +74,7 @@ public class TableServiceImpl implements TableService {
         table.setUser(user);
         user.addTable(table);
         tableRepo.save(table);
-        return "attached";
+        return CafeTable.ATTACHED;
     }
 
     @Override

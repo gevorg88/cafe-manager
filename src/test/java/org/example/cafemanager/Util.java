@@ -14,4 +14,8 @@ public class Util {
         }
         return salt.toString();
     }
+
+    public static Long randomLong() {
+        return (new Random()).nextLong();
+    }
 }

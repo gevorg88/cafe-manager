@@ -10,6 +10,10 @@ import java.util.Set;
 @Entity
 @Table(name = "cafe_tables", indexes = { @Index(name = "idx_cafe_table_name", columnList = "name"), })
 public class CafeTable {
+    public static final String ATTACHED = "attached";
+
+    public static final String DETACHED = "detached";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
