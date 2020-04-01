@@ -5,6 +5,7 @@ import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
+import org.example.cafemanager.dto.table.TableCreateRequestBody;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
@@ -152,7 +153,7 @@ public class EntitiesBuilder {
         };
     }
 
-    public static OnlyTableProps createOnlyTableProps(Long tableId){
+    public static OnlyTableProps createOnlyTableProps(Long tableId) {
         String name = Util.randomString(6);
         return new OnlyTableProps() {
             @Override
@@ -165,5 +166,11 @@ public class EntitiesBuilder {
                 return name;
             }
         };
+    }
+
+    public static TableCreateRequestBody createTableCreateRequestBody() {
+        TableCreateRequestBody tr = new TableCreateRequestBody();
+        tr.setName(Util.randomString(6));
+        return tr;
     }
 }
