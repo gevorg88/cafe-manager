@@ -4,10 +4,8 @@ import org.example.cafemanager.EntitiesBuilder;
 import org.example.cafemanager.Util;
 import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.User;
-import org.example.cafemanager.dto.table.OnlyTableProps;
-import org.example.cafemanager.dto.table.SimpleTableProps;
-import org.example.cafemanager.dto.table.TableCreate;
-import org.example.cafemanager.dto.table.TableCreateRequestBody;
+import org.example.cafemanager.domain.enums.Status;
+import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.CafeTableRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -22,6 +20,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -118,7 +118,7 @@ public class TableServiceImplTest {
     @Test
     public void updateWithNotFoundTable() {
         Mockito.when(cafeTableRepository.findCafeTableById(1L)).thenReturn(null);
-        Assert.assertThrows(InstanceNotFoundException.class, ()->tableService.update(1L, EntitiesBuilder.createTableCreateRequestBody()));
+        Assert.assertThrows(InstanceNotFoundException.class, () -> tableService.update(1L, EntitiesBuilder.createTableCreateRequestBody()));
     }
 
     @Test
@@ -133,10 +133,59 @@ public class TableServiceImplTest {
 
     @Test
     public void update() {
-        CafeTable table = EntitiesBuilder.createCafeTable();
-        TableCreate createReq = new TableCreate(table.getName());
-        Mockito.when(cafeTableRepository.save(table)).thenReturn(table);
-        CafeTable t = tableService.create(createReq);
-        Assert.assertEquals(table.getName(), tableService.create(createReq).getName());
+        TableCreateRequestBody tb = EntitiesBuilder.createTableCreateRequestBody();
+        CafeTable t = EntitiesBuilder.createCafeTable();
+        tb.setName(tb.getName());
+        Mockito.when(cafeTableRepository.findCafeTableById(t.getId())).thenReturn(t);
+        Mockito.when(cafeTableRepository.save(t)).thenReturn(t);
+        Assert.assertEquals(tb.getName(), tableService.update(t.getId(), tb).getName());
+    }
+
+    @Test
+    public void getUserAssignedTablesWithOpenStatus() {
+        List<TableWithOpenOrdersCount> tables = Collections.singletonList(EntitiesBuilder.createTableWithOpenOrdersCount(2));
+        Mockito.when(cafeTableRepository.userTablesWithOrdersForStatus(1L, Status.OPEN)).thenReturn(tables);
+        Collection<TableWithOpenOrdersCount> createdTables = tableService.getUserAssignedTablesWithOpenStatus(1L);
+        Assert.assertEquals(tables.size(), createdTables.size());
+        Assert.assertEquals(tables.iterator().next().getOrderCount(), createdTables.iterator().next().getOrderCount());
+    }
+
+    @Test
+    public void getUserAssignedTable() {
+        User u = EntitiesBuilder.createUser();
+        CafeTable t = EntitiesBuilder.createCafeTable();
+        t.setUser(u);
+        u.addTable(t);
+        Mockito.when(cafeTableRepository.findCafeTableByIdAndUser(t.getId(), u)).thenReturn(t);
+        CafeTable requestedTable = tableService.getUserAssignedTable(t.getId(), u);
+        Assert.assertEquals(t, requestedTable);
+        Assert.assertEquals(t.getUser().getUsername(), requestedTable.getUser().getUsername());
+    }
+
+    @Test
+    public void getUserAssignedTableNotFound() {
+        User u = EntitiesBuilder.createUser();
+        CafeTable t = EntitiesBuilder.createCafeTable();
+        t.setUser(u);
+        u.addTable(t);
+        Mockito.when(cafeTableRepository.findCafeTableByIdAndUser(t.getId(), u)).thenReturn(null);
+        Assert.assertThrows(InstanceNotFoundException.class, () -> tableService.getUserAssignedTable(t.getId(), u));
+    }
+
+    @Test
+    public void deleteNotFound() {
+        CafeTable t = EntitiesBuilder.createCafeTable();
+        Mockito.when(cafeTableRepository.findCafeTableById(t.getId())).thenReturn(null);
+        Assert.assertThrows(InstanceNotFoundException.class, () -> tableService.delete(t.getId()));
+    }
+
+    @Test
+    public void delete() {
+        CafeTable t = EntitiesBuilder.createCafeTable();
+        Mockito.doAnswer(
+                (invocation) -> {cafeTableRepository.findCafeTableById(t.getId());
+                return null;
+                }).when(t).setName("completed");
+        Mockito.verify(userService.delete(t.getId()),Mockito.times(1)).booleanValue();
     }
 }

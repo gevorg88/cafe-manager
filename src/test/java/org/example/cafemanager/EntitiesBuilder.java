@@ -6,6 +6,7 @@ import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
+import org.example.cafemanager.dto.table.TableWithOpenOrdersCount;
 import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
@@ -172,5 +173,25 @@ public class EntitiesBuilder {
         TableCreateRequestBody tr = new TableCreateRequestBody();
         tr.setName(Util.randomString(6));
         return tr;
+    }
+
+    public static TableWithOpenOrdersCount createTableWithOpenOrdersCount(Integer orderCount) {
+        String tableName = Util.randomString(6);
+        return new TableWithOpenOrdersCount() {
+            @Override
+            public Long getId() {
+                return Util.randomLong();
+            }
+
+            @Override
+            public String getName() {
+                return tableName;
+            }
+
+            @Override
+            public Integer getOrderCount() {
+                return orderCount;
+            }
+        };
     }
 }
