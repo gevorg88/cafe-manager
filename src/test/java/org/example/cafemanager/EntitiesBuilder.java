@@ -3,6 +3,8 @@ package org.example.cafemanager;
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
+import org.example.cafemanager.dto.product.CreateProductRequest;
+import org.example.cafemanager.dto.product.SimpleProductProps;
 import org.example.cafemanager.dto.table.OnlyTableProps;
 import org.example.cafemanager.dto.table.SimpleTableProps;
 import org.example.cafemanager.dto.table.TableCreateRequestBody;
@@ -124,11 +126,11 @@ public class EntitiesBuilder {
         };
     }
 
-    public static SimpleTableProps createSimpleTableProps(Long tableId) {
+    public static SimpleTableProps createSimpleTableProps() {
         return new SimpleTableProps() {
             @Override
             public Long getId() {
-                return tableId;
+                return Util.randomLong();
             }
 
             @Override
@@ -193,5 +195,25 @@ public class EntitiesBuilder {
                 return orderCount;
             }
         };
+    }
+
+    public static SimpleProductProps createSimpleProductProps() {
+        return new SimpleProductProps() {
+            @Override
+            public Long getId() {
+                return Util.randomLong();
+            }
+
+            @Override
+            public String getName() {
+                return Util.randomString(6);
+            }
+        };
+    }
+
+    public static CreateProductRequest createProductCreateRequestBody() {
+        CreateProductRequest pr = new CreateProductRequest();
+        pr.setName(Util.randomString(6));
+        return pr;
     }
 }

@@ -69,9 +69,10 @@ public class ProductRepositoryTest extends AbstractRepositoryTest {
 
         entityManager.persist(product);
         entityManager.flush();
-        entityManager.clear();
 
         Assert.assertNotNull(productRepository.findProductById(product.getId()));
+
+        entityManager.clear();
     }
 
     @Test

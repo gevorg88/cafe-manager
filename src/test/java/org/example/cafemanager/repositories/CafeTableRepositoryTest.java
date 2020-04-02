@@ -37,7 +37,6 @@ public class CafeTableRepositoryTest extends AbstractRepositoryTest {
         CafeTable table = EntitiesBuilder.createCafeTable(Util.randomString(256));
         entityManager.persist(table);
         entityManager.flush();
-
         entityManager.clear();
     }
 

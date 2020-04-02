@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean delete(Long userId) {
+    public void delete(Long userId) {
         User user = userRepo.findUserById(userId);
 
         if (null == user) {
@@ -149,6 +149,5 @@ public class UserServiceImpl implements UserService {
             table.setOrders(new HashSet<>());
         }
         userRepo.delete(user);
-        return true;
     }
 }

@@ -153,9 +153,6 @@ public class UserServiceImplTest {
 
     @Test
     public void updateWithNotFoundException() {
-        User u = EntitiesBuilder.createUser();
-        u.setId(1L);
-        Mockito.when(userRepository.findUserById(u.getId())).thenReturn(u);
         Assert.assertThrows(InstanceNotFoundException.class, () -> {
             userService.update(2L, new UpdateUserRequestBody());
         });
@@ -175,20 +172,10 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void delete() {
-        User u = EntitiesBuilder.createUser();
-        u.setId(1L);
-        Mockito.when(userRepository.findUserById(u.getId())).thenReturn(u);
-        Assert.assertTrue(userService.delete(u.getId()));
-    }
-
-    @Test
     public void deleteWithNotFoundException() {
-        User u = EntitiesBuilder.createUser();
-        u.setId(1L);
-        Mockito.when(userRepository.findUserById(u.getId() + 1)).thenReturn(u);
+        Mockito.when(userRepository.findUserById(1L)).thenReturn(null);
         Assert.assertThrows(InstanceNotFoundException.class, () -> {
-            userService.delete(u.getId());
+            userService.delete(1L);
         });
     }
 }

@@ -26,5 +26,5 @@ public interface UserService {
 
     User update(Long userId, UpdateUserRequestBody requestBody);
 
-    boolean delete(Long userId);
+    void delete(Long userId);
 }

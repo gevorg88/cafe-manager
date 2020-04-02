@@ -39,7 +39,7 @@ public class TableServiceImplTest {
     @Test
     public void getAllTables() {
         List<SimpleTableProps> tables =
-                Arrays.asList(EntitiesBuilder.createSimpleTableProps(1L), EntitiesBuilder.createSimpleTableProps(2L));
+                Arrays.asList(EntitiesBuilder.createSimpleTableProps(), EntitiesBuilder.createSimpleTableProps());
         Mockito.when(cafeTableRepository.findAllBy()).thenReturn(tables);
         Assert.assertEquals(tableService.getAllTables().size(), tables.size());
     }
@@ -66,8 +66,6 @@ public class TableServiceImplTest {
     public void create() {
         CafeTable table = EntitiesBuilder.createCafeTable();
         TableCreate createReq = new TableCreate(table.getName());
-        Mockito.when(cafeTableRepository.save(table)).thenReturn(table);
-        CafeTable t = tableService.create(createReq);
         Assert.assertEquals(table.getName(), tableService.create(createReq).getName());
     }
 
@@ -177,15 +175,5 @@ public class TableServiceImplTest {
         CafeTable t = EntitiesBuilder.createCafeTable();
         Mockito.when(cafeTableRepository.findCafeTableById(t.getId())).thenReturn(null);
         Assert.assertThrows(InstanceNotFoundException.class, () -> tableService.delete(t.getId()));
-    }
-
-    @Test
-    public void delete() {
-        CafeTable t = EntitiesBuilder.createCafeTable();
-        Mockito.doAnswer(
-                (invocation) -> {cafeTableRepository.findCafeTableById(t.getId());
-                return null;
-                }).when(t).setName("completed");
-        Mockito.verify(userService.delete(t.getId()),Mockito.times(1)).booleanValue();
     }
 }
