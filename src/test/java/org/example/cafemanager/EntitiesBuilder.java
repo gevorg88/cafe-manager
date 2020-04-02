@@ -3,6 +3,9 @@ package org.example.cafemanager;
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.domain.enums.Status;
+import org.example.cafemanager.dto.order.OrderDetails;
+import org.example.cafemanager.dto.order.ProductInOrderReq;
+import org.example.cafemanager.dto.order.UpdateProductInOrderDto;
 import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.product.SimpleProductProps;
 import org.example.cafemanager.dto.table.OnlyTableProps;
@@ -13,12 +16,14 @@ import org.example.cafemanager.dto.user.CreateUserRequest;
 import org.example.cafemanager.dto.user.UpdateUserRequestBody;
 import org.example.cafemanager.dto.user.UserPublicProfile;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class EntitiesBuilder {
     public final static String email = "test@test.test";
 
     public static User createUser() {
         User u = new User();
-        u.setId(Util.randomLong());
         u.setEmail(email);
         u.setUsername(Util.randomString(6));
         u.setPassword(Util.randomString(6));
@@ -37,7 +42,6 @@ public class EntitiesBuilder {
 
     public static CafeTable createCafeTable() {
         CafeTable cafeTable = new CafeTable();
-        cafeTable.setId(Util.randomLong());
         cafeTable.setName(Util.randomString(6));
         return cafeTable;
     }
@@ -56,7 +60,6 @@ public class EntitiesBuilder {
 
     public static Order createOrder() {
         Order o = new Order();
-        o.setId(Util.randomLong());
         o.setCafeTable(createCafeTable());
         o.setStatus(Status.OPEN);
         return o;
@@ -65,7 +68,6 @@ public class EntitiesBuilder {
     public static Product createProduct() {
         Product product = new Product();
         product.setName(Util.randomString(6));
-        product.setId(Util.randomLong());
         return product;
     }
 
@@ -82,7 +84,6 @@ public class EntitiesBuilder {
         p.setOrder(o);
         p.setProduct(createProduct());
         p.setAmount(1);
-        p.setId(Util.randomLong());
         return p;
     }
 
@@ -215,5 +216,22 @@ public class EntitiesBuilder {
         CreateProductRequest pr = new CreateProductRequest();
         pr.setName(Util.randomString(6));
         return pr;
+    }
+
+    public static ProductInOrderReq createProductInOrderReq() {
+        ProductInOrderReq pioReq = new ProductInOrderReq();
+        pioReq.setAmount(1);
+        pioReq.setProductId(Util.randomLong());
+        return pioReq;
+    }
+
+    public static OrderDetails createOrderDetails() {
+        Long tableId = Util.randomLong();
+        List<ProductInOrderReq> pios = Arrays.asList(createProductInOrderReq(), createProductInOrderReq());
+        return new OrderDetails(tableId, pios, createUser());
+    }
+
+    public static UpdateProductInOrderDto createUpdateProductInOrderDto() {
+        return new UpdateProductInOrderDto(Util.randomLong(), Util.randomLong(), EntitiesBuilder.createUser(), 1);
     }
 }

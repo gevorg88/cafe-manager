@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 
 public class OrderRepositoryTest extends AbstractRepositoryTest {
 
@@ -21,7 +22,6 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
     public void persistOrderWithoutStatus() {
         Order order = EntitiesBuilder.createOrder();
         order.setStatus(null);
-
         entityManager.persist(order.getCafeTable());
         entityManager.persist(order);
         entityManager.flush();
@@ -32,7 +32,6 @@ public class OrderRepositoryTest extends AbstractRepositoryTest {
     public void persistOrderWithoutTable() {
         Order order = EntitiesBuilder.createOrder();
         order.setCafeTable(null);
-
         entityManager.persist(order);
         entityManager.flush();
         entityManager.clear();

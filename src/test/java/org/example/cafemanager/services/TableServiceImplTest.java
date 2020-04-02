@@ -97,7 +97,9 @@ public class TableServiceImplTest {
     @Test
     public void assignUser() {
         CafeTable t = EntitiesBuilder.createCafeTable();
+        t.setId(Util.randomLong());
         User u = EntitiesBuilder.createUser();
+        u.setId(Util.randomLong());
         Mockito.when(cafeTableRepository.findCafeTableById(t.getId())).thenReturn(t);
         Mockito.when(userService.getUserById(u.getId())).thenReturn(u);
         Assert.assertEquals(CafeTable.ATTACHED, tableService.assignUser(t.getId(), u.getId()));

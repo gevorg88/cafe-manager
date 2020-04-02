@@ -82,14 +82,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void deleteProductInOrder(Long orderId, Long productInOrderId, User user) {
         Order order = getOrderByIdAndUser(orderId, user);
-        if (null == order) {
-            throw new InstanceNotFoundException("Order");
-        }
 
         ProductsInOrder pio = ordersProductInOrder(order, productInOrderId);
-        if (null == pio) {
-            throw new InstanceNotFoundException("Product in order");
-        }
 
         order.removeProductInOrder(pio);
         productsInOrderRepository.delete(pio);
@@ -160,7 +154,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private ProductsInOrder ordersProductInOrder(@NotNull Order order, Long productInOrderId) {
-        Assert.notNull(order, "Order can not be null");
         ProductsInOrder pio = order.getProductsInOrders().stream()
                 .filter((productsInOrder) -> productsInOrder.getId().equals(productInOrderId)).findFirst().orElse(null);
 
