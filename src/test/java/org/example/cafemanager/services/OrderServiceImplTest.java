@@ -1,24 +1,17 @@
 package org.example.cafemanager.services;
 
 import org.example.cafemanager.EntitiesBuilder;
-import org.example.cafemanager.Util;
-import org.example.cafemanager.domain.CafeTable;
-import org.example.cafemanager.domain.Order;
-import org.example.cafemanager.domain.Product;
-import org.example.cafemanager.domain.User;
+import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.order.OrderDetails;
-import org.example.cafemanager.dto.table.*;
-import org.example.cafemanager.repositories.CafeTableRepository;
+import org.example.cafemanager.dto.order.UpdateProductInOrderDto;
 import org.example.cafemanager.repositories.OrderRepository;
 import org.example.cafemanager.repositories.ProductsInOrderRepository;
 import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
-import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.order.impls.OrderServiceImpl;
 import org.example.cafemanager.services.product.impls.ProductServiceImpl;
 import org.example.cafemanager.services.table.impls.TableServiceImpl;
-import org.example.cafemanager.services.user.impls.UserServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderServiceImplTest {
@@ -46,9 +35,6 @@ public class OrderServiceImplTest {
 
     @Mock
     ProductServiceImpl productService;
-
-    @Mock
-    private ProductsInOrderRepository productsInOrderRepository;
 
     @Test
     public void createWithNullableRequest() {
@@ -170,12 +156,35 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    public void updateProductInOrderNotFound(){
+    public void updateProductInOrderWithOrderNotFound() {
         Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.updateProductInOrder(EntitiesBuilder.createUpdateProductInOrderDto()));
     }
 
     @Test
-    public void updateProductInOrderWithEmptyUpdateDto(){
+    public void updateProductInOrderWithEmptyUpdateDto() {
         Assert.assertThrows(IllegalArgumentException.class, () -> orderService.updateProductInOrder(null));
+    }
+
+    @Test
+    public void updateProductInOrderNotFound() {
+        UpdateProductInOrderDto dto = EntitiesBuilder.createUpdateProductInOrderDto();
+        Order order = EntitiesBuilder.createOrder();
+        order.setId(dto.getOrderId());
+        Mockito.when(orderRepository.getByIdAndCafeTable_User(dto.getOrderId(), dto.getUser())).thenReturn(order);
+        order.setProductsInOrders(Collections.emptySet());
+        Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.updateProductInOrder(dto));
+    }
+
+    @Test
+    public void updateProductInOrder() {
+        UpdateProductInOrderDto dto = EntitiesBuilder.createUpdateProductInOrderDto();
+        dto.setAmount(10);
+        Order order = EntitiesBuilder.createOrder();
+        order.setId(dto.getOrderId());
+        ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
+        pio.setId(dto.getPioId());
+        order.addProductsInOrders(pio);
+        Mockito.when(orderRepository.getByIdAndCafeTable_User(dto.getOrderId(), dto.getUser())).thenReturn(order);
+        Assert.assertEquals(dto.getAmount(), orderService.updateProductInOrder(dto).getAmount());
     }
 }

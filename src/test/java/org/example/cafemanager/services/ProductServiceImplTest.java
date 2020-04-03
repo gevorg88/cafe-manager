@@ -1,15 +1,10 @@
 package org.example.cafemanager.services;
 
 import org.example.cafemanager.EntitiesBuilder;
-import org.example.cafemanager.Util;
-import org.example.cafemanager.domain.CafeTable;
 import org.example.cafemanager.domain.Product;
-import org.example.cafemanager.domain.User;
-import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.dto.product.SimpleProductProps;
-import org.example.cafemanager.dto.table.*;
 import org.example.cafemanager.repositories.ProductRepository;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.exceptions.MustBeUniqueException;
@@ -21,10 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
