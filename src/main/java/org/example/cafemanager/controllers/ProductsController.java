@@ -3,12 +3,9 @@ package org.example.cafemanager.controllers;
 import org.example.cafemanager.dto.product.ProductCreate;
 import org.example.cafemanager.dto.product.CreateProductRequest;
 import org.example.cafemanager.dto.ResponseModel;
-import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
-import org.example.cafemanager.services.exceptions.MustBeUniqueException;
 import org.example.cafemanager.services.product.ProductService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,16 +38,8 @@ public class ProductsController {
             return ResponseEntity.unprocessableEntity().body(result);
         }
         ProductCreate createDto = new ProductCreate(requestBody.getName());
-        try {
-            productService.create(createDto);
-            result.setMessage("Product has been successfully created");
-        } catch (MustBeUniqueException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.unprocessableEntity().body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        productService.create(createDto);
+        result.setMessage("Product has been successfully created");
         return ResponseEntity.ok(result);
     }
 
@@ -64,36 +53,16 @@ public class ProductsController {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
-        try {
-            productService.update(productId, requestBody);
-            result.setMessage("Product has been successfully updated");
-            return ResponseEntity.ok(result);
-        } catch (MustBeUniqueException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.unprocessableEntity().body(result);
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        productService.update(productId, requestBody);
+        result.setMessage("Product has been successfully updated");
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<?> delete(@PathVariable("productId") Long productId) {
         ResponseModel result = new ResponseModel();
-
-        try {
-            productService.delete(productId);
-            result.setMessage("Product has been successfully updated");
-            return ResponseEntity.ok(result);
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        productService.delete(productId);
+        result.setMessage("Product has been successfully updated");
+        return ResponseEntity.ok(result);
     }
 }

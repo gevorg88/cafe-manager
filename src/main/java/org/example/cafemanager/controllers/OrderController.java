@@ -6,20 +6,17 @@ import org.example.cafemanager.domain.User;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.dto.order.*;
-import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
 import org.example.cafemanager.services.exceptions.InstanceNotFoundException;
 import org.example.cafemanager.services.order.OrderService;
 import org.example.cafemanager.services.product.ProductService;
 import org.example.cafemanager.services.table.TableService;
 import org.example.cafemanager.utilities.ValidationMessagesCollector;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Set;
 
 @Controller
@@ -63,35 +60,16 @@ public class OrderController {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
-        try {
-            orderService.createOrder(new OrderDetails(tableId, requestBody.getProducts(), user));
-            result.setMessage("Order has been successfully created");
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (ChooseAtLeastOneException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        orderService.createOrder(new OrderDetails(tableId, requestBody.getProducts(), user));
+        result.setMessage("Order has been successfully created");
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{orderId}")
     public ResponseEntity<?> delete(@PathVariable("orderId") Long orderId, @AuthenticationPrincipal User user) {
         ResponseModel result = new ResponseModel();
-        try {
-            orderService.deleteOrder(orderId, user);
-            result.setMessage("Order has been successfully deleted");
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        orderService.deleteOrder(orderId, user);
+        result.setMessage("Order has been successfully deleted");
         return ResponseEntity.ok(result);
     }
 
@@ -107,16 +85,8 @@ public class OrderController {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
-        try {
-            orderService.updateOrderStatus(orderId, orderStatus.getStatus(), user);
-            result.setMessage("Order status has been successfully updated");
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        orderService.updateOrderStatus(orderId, orderStatus.getStatus(), user);
+        result.setMessage("Order status has been successfully updated");
         return ResponseEntity.ok(result);
     }
 
@@ -133,18 +103,9 @@ public class OrderController {
             result.setMessage(ValidationMessagesCollector.collectErrorMessages(errors));
             return ResponseEntity.unprocessableEntity().body(result);
         }
-        try {
-            orderService.updateProductInOrder(
-                    new UpdateProductInOrderDto(productInOrderId, orderId, user, requestBody.getAmount()));
-
-            result.setMessage("Product In Order has been successfully updated");
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        orderService.updateProductInOrder(
+                new UpdateProductInOrderDto(productInOrderId, orderId, user, requestBody.getAmount()));
+        result.setMessage("Product In Order has been successfully updated");
         return ResponseEntity.ok(result);
     }
 
@@ -154,16 +115,8 @@ public class OrderController {
             @PathVariable("pioId") Long productInOrderId,
             @AuthenticationPrincipal User user) {
         ResponseModel result = new ResponseModel();
-        try {
-            orderService.deleteProductInOrder(orderId, productInOrderId, user);
-            result.setMessage("Product In Order has been successfully deleted");
-        } catch (InstanceNotFoundException e) {
-            result.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } catch (Exception e) {
-            result.setMessage("Something goes wrong! Try again later");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+        orderService.deleteProductInOrder(orderId, productInOrderId, user);
+        result.setMessage("Product In Order has been successfully deleted");
         return ResponseEntity.ok(result);
     }
 }

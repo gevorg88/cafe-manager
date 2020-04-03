@@ -1,6 +1,7 @@
 package org.example.cafemanager.services;
 
 import org.example.cafemanager.EntitiesBuilder;
+import org.example.cafemanager.Util;
 import org.example.cafemanager.domain.*;
 import org.example.cafemanager.domain.enums.Status;
 import org.example.cafemanager.dto.order.OrderDetails;
@@ -36,6 +37,9 @@ public class OrderServiceImplTest {
     @Mock
     ProductServiceImpl productService;
 
+    @Mock
+    ProductsInOrderRepository productsInOrderRepository;
+
     @Test
     public void createWithNullableRequest() {
         Assert.assertThrows(IllegalArgumentException.class, () -> orderService.createOrder(null));
@@ -64,13 +68,14 @@ public class OrderServiceImplTest {
     public void createWhereNotOpenOrder() {
         OrderDetails orderDetails = EntitiesBuilder.createOrderDetails();
         CafeTable table = EntitiesBuilder.createCafeTable();
+        ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
+        pio.setId(Util.randomLong());
         Mockito.when(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, table)).thenReturn(null);
         Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser())).thenReturn(table);
         Mockito.when(
                 productService
                         .findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
                 .thenReturn(EntitiesBuilder.createProduct());
-
         Assert.assertEquals(Status.OPEN, orderService.createOrder(orderDetails).getStatus());
     }
 
