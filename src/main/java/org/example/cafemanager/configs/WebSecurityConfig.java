@@ -2,7 +2,7 @@ package org.example.cafemanager.configs;
 
 import org.example.cafemanager.domain.enums.Role;
 import org.example.cafemanager.repositories.UserRepository;
-import org.example.cafemanager.sechandlers.LoggingAccessDeniedHandler;
+import org.example.cafemanager.exceptionhandlers.LoggingAccessDeniedHandler;
 import org.example.cafemanager.services.user.impls.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -48,7 +48,8 @@ public class OrderServiceImplTest {
     @Test
     public void createWithoutTable() {
         OrderDetails orderDetails = EntitiesBuilder.createOrderDetails();
-        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser())).thenReturn(null);
+        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser()))
+                .thenReturn(null);
         Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.createOrder(orderDetails));
     }
 
@@ -56,10 +57,9 @@ public class OrderServiceImplTest {
     public void createWithoutProducts() {
         OrderDetails orderDetails = EntitiesBuilder.createOrderDetails();
         CafeTable table = EntitiesBuilder.createCafeTable();
-        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser())).thenReturn(table);
-        Mockito.when(
-                productService
-                        .findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
+        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser()))
+                .thenReturn(table);
+        Mockito.when(productService.findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
                 .thenReturn(null);
         Assert.assertThrows(ChooseAtLeastOneException.class, () -> orderService.createOrder(orderDetails));
     }
@@ -71,10 +71,9 @@ public class OrderServiceImplTest {
         ProductsInOrder pio = EntitiesBuilder.createProductInOrder();
         pio.setId(Util.randomLong());
         Mockito.when(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, table)).thenReturn(null);
-        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser())).thenReturn(table);
-        Mockito.when(
-                productService
-                        .findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
+        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser()))
+                .thenReturn(table);
+        Mockito.when(productService.findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
                 .thenReturn(EntitiesBuilder.createProduct());
         Assert.assertEquals(Status.OPEN, orderService.createOrder(orderDetails).getStatus());
     }
@@ -85,10 +84,9 @@ public class OrderServiceImplTest {
         CafeTable table = EntitiesBuilder.createCafeTable();
         Order order = EntitiesBuilder.createOrder();
         Mockito.when(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, table)).thenReturn(order);
-        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser())).thenReturn(table);
-        Mockito.when(
-                productService
-                        .findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
+        Mockito.when(tableService.getUserAssignedTable(orderDetails.getTableId(), orderDetails.getUser()))
+                .thenReturn(table);
+        Mockito.when(productService.findOneById(orderDetails.getProdsInOrder().iterator().next().getProductId()))
                 .thenReturn(EntitiesBuilder.createProduct());
         Assert.assertEquals(Status.OPEN, orderService.createOrder(orderDetails).getStatus());
     }
@@ -106,7 +104,8 @@ public class OrderServiceImplTest {
         Order order = EntitiesBuilder.createOrder();
         order.setProductsInOrders(Collections.emptySet());
         Mockito.when(orderRepository.getByIdAndCafeTable_User(order.getId(), user)).thenReturn(order);
-        Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.deleteProductInOrder(order.getId(), 1L, user));
+        Assert.assertThrows(InstanceNotFoundException.class,
+                () -> orderService.deleteProductInOrder(order.getId(), 1L, user));
     }
 
     @Test
@@ -128,7 +127,8 @@ public class OrderServiceImplTest {
         User user = EntitiesBuilder.createUser();
         Order order = EntitiesBuilder.createOrder();
         Mockito.when(orderRepository.getByIdAndCafeTable_User(order.getId(), user)).thenReturn(null);
-        Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.updateOrderStatus(order.getId(), Status.OPEN, user));
+        Assert.assertThrows(InstanceNotFoundException.class,
+                () -> orderService.updateOrderStatus(order.getId(), Status.OPEN, user));
     }
 
     @Test
@@ -145,7 +145,8 @@ public class OrderServiceImplTest {
         Order order = EntitiesBuilder.createOrder();
         Mockito.when(orderRepository.getByIdAndCafeTable_User(order.getId(), user)).thenReturn(order);
         order.setStatus(Status.CLOSED);
-        Assert.assertEquals(Status.CLOSED, orderService.updateOrderStatus(order.getId(), Status.CLOSED, user).getStatus());
+        Assert.assertEquals(Status.CLOSED,
+                orderService.updateOrderStatus(order.getId(), Status.CLOSED, user).getStatus());
     }
 
     @Test
@@ -155,14 +156,16 @@ public class OrderServiceImplTest {
         order.setStatus(Status.CLOSED);
         Order order2 = EntitiesBuilder.createOrder();
         Mockito.when(orderRepository.getByIdAndCafeTable_User(order.getId(), user)).thenReturn(order);
-        Mockito.when(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, order.getCafeTable())).thenReturn(order2);
+        Mockito.when(orderRepository.findOrderByStatusAndCafeTable(Status.OPEN, order.getCafeTable()))
+                .thenReturn(order2);
         Assert.assertEquals(Status.OPEN, orderService.updateOrderStatus(order.getId(), Status.OPEN, user).getStatus());
         Assert.assertEquals(Status.CLOSED, order2.getStatus());
     }
 
     @Test
     public void updateProductInOrderWithOrderNotFound() {
-        Assert.assertThrows(InstanceNotFoundException.class, () -> orderService.updateProductInOrder(EntitiesBuilder.createUpdateProductInOrderDto()));
+        Assert.assertThrows(InstanceNotFoundException.class,
+                () -> orderService.updateProductInOrder(EntitiesBuilder.createUpdateProductInOrderDto()));
     }
 
     @Test

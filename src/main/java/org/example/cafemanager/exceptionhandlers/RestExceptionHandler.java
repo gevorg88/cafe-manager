@@ -1,4 +1,4 @@
-package org.example.cafemanager.sechandlers;
+package org.example.cafemanager.exceptionhandlers;
 
 import org.example.cafemanager.dto.ResponseModel;
 import org.example.cafemanager.services.exceptions.ChooseAtLeastOneException;
@@ -47,28 +47,6 @@ public class RestExceptionHandler extends ExceptionHandlerExceptionResolver {
     ResponseModel handleInstanceException() {
         return createResponse("Something goes wrong! Try again later");
     }
-
-//    @ExceptionHandler(InstanceNotFoundException.class)
-//    protected ResponseEntity<?> handleException(InstanceNotFoundException e) {
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(createResponse(e.getMessage()));
-//    }
-//
-//    @ExceptionHandler(MustBeUniqueException.class)
-//    protected ResponseEntity<?> handleException(MustBeUniqueException e) {
-//        return ResponseEntity.unprocessableEntity().body(createResponse(e.getMessage()));
-//    }
-//
-//    @ExceptionHandler(ChooseAtLeastOneException.class)
-//    protected ResponseEntity<?> handleException(ChooseAtLeastOneException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createResponse(e.getMessage()));
-//    }
-//
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<?> handleException(Exception e) {
-//        ResponseModel result = new ResponseModel();
-//        result.setMessage("Something goes wrong! Try again later");
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createResponse(e.getMessage()));
-//    }
 
     private ResponseModel createResponse(String mess) {
         ResponseModel result = new ResponseModel();

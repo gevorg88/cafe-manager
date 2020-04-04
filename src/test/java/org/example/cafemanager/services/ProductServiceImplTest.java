@@ -68,13 +68,15 @@ public class ProductServiceImplTest {
 
     @Test
     public void updateWithNullableProductName() {
-        Assert.assertThrows(IllegalArgumentException.class, () -> productService.update(1L, new CreateProductRequest()));
+        Assert.assertThrows(IllegalArgumentException.class,
+                () -> productService.update(1L, new CreateProductRequest()));
     }
 
     @Test
     public void updateWithNotFoundProduct() {
         Mockito.when(productRepository.findProductById(1L)).thenReturn(null);
-        Assert.assertThrows(InstanceNotFoundException.class, () -> productService.update(1L, EntitiesBuilder.createProductCreateRequestBody()));
+        Assert.assertThrows(InstanceNotFoundException.class,
+                () -> productService.update(1L, EntitiesBuilder.createProductCreateRequestBody()));
     }
 
     @Test

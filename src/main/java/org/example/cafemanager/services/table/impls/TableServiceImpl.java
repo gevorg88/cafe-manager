@@ -94,6 +94,7 @@ public class TableServiceImpl implements TableService {
         }
 
         table.setOrders(new HashSet<>());
+        tableRepo.delete(table);
     }
 
     @Override

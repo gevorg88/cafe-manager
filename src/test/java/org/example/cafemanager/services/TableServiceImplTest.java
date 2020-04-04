@@ -111,13 +111,15 @@ public class TableServiceImplTest {
 
     @Test
     public void updateWithNullableTableName() {
-        Assert.assertThrows(IllegalArgumentException.class, () -> tableService.update(1L, new TableCreateRequestBody()));
+        Assert.assertThrows(IllegalArgumentException.class,
+                () -> tableService.update(1L, new TableCreateRequestBody()));
     }
 
     @Test
     public void updateWithNotFoundTable() {
         Mockito.when(cafeTableRepository.findCafeTableById(1L)).thenReturn(null);
-        Assert.assertThrows(InstanceNotFoundException.class, () -> tableService.update(1L, EntitiesBuilder.createTableCreateRequestBody()));
+        Assert.assertThrows(InstanceNotFoundException.class,
+                () -> tableService.update(1L, EntitiesBuilder.createTableCreateRequestBody()));
     }
 
     @Test
@@ -142,7 +144,8 @@ public class TableServiceImplTest {
 
     @Test
     public void getUserAssignedTablesWithOpenStatus() {
-        List<TableWithOpenOrdersCount> tables = Collections.singletonList(EntitiesBuilder.createTableWithOpenOrdersCount(2));
+        List<TableWithOpenOrdersCount> tables =
+                Collections.singletonList(EntitiesBuilder.createTableWithOpenOrdersCount(2));
         Mockito.when(cafeTableRepository.userTablesWithOrdersForStatus(1L, Status.OPEN)).thenReturn(tables);
         Collection<TableWithOpenOrdersCount> createdTables = tableService.getUserAssignedTablesWithOpenStatus(1L);
         Assert.assertEquals(tables.size(), createdTables.size());
